@@ -13,6 +13,7 @@ CREATE TABLE col
 CREATE TABLE card
 (
     id           int primary key auto_increment,
+    row          int,
     title        varchar(100),
     contents     varchar(500) not null,
     writer       varchar(50)  not null,
@@ -22,6 +23,9 @@ CREATE TABLE card
     col_key      int
 );
 
-INSERT INTO col (col_name, deleted) VALUES ("To do", false);
-INSERT INTO col (col_name, deleted) VALUES ("In Progress", false);
-INSERT INTO col (col_name, deleted) VALUES ("Done", false);
+INSERT INTO col (col_name, deleted)
+VALUES ("To do", false);
+INSERT INTO col (col_name, deleted)
+VALUES ("In Progress", false);
+INSERT INTO col (col_name, deleted)
+VALUES ("Done", false);

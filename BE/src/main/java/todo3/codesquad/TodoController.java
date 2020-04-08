@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TodoController {
@@ -16,7 +17,8 @@ public class TodoController {
     ColRepository colRepository;
 
     @PostMapping("/api/cards")
-    public void createCard(@RequestBody HashMap<String,Object> map) {
+    public void createCard(@RequestBody Map<String,Object> map) {
+        System.out.println(colRepository.findByColName(map.get("colName").toString()).orElse(null));
         Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
         List<Card> cards = col.getCards();
         Card card = new Card(map);
@@ -25,12 +27,11 @@ public class TodoController {
     }
 
     @PostMapping("/api/cards/update")
-    public void updateCard(@RequestBody HashMap<String,Object> map) {
+    public void updateCard(@RequestBody Map<String,Object> map) {
         Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
         List<Card> cards = col.getCards();
-        Card card = cards.get((int) map.get("index"));
+        Card card = cards.get((int) map.get("row") - 1);
         card.update(map);
-        cards.add((int)map.get("index"),card);
         colRepository.save(col);
     }
 }

@@ -1,19 +1,24 @@
 package todo3.codesquad;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.Map;
 
-@Getter @Setter @ToString
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Card {
 
     @Id
     private int id;
+
+    private int row;
 
     private String title;
 
@@ -25,7 +30,8 @@ public class Card {
 
     private LocalDateTime writtenTime;
 
-    public Card(HashMap<String,Object> map) {
+    public Card(Map<String, Object> map) {
+        this.row = (int) map.get("row");
         this.title = map.get("title").toString();
         this.contents = map.get("contents").toString();
         this.writer = map.get("writer").toString();
@@ -33,11 +39,10 @@ public class Card {
         this.writtenTime = LocalDateTime.now();
     }
 
-    public void update(HashMap<String,Object> map) {
+    public void update(Map<String, Object> map) {
         this.title = map.get("title").toString();
         this.contents = map.get("contents").toString();
         this.writer = map.get("writer").toString();
-        this.deleted = false;
         this.writtenTime = LocalDateTime.now();
     }
 }
