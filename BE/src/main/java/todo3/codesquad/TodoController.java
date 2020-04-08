@@ -16,8 +16,11 @@ public class TodoController {
     @Autowired
     ColRepository colRepository;
 
+    @Autowired
+    CardRepository cardRepository;
+
     @PostMapping("/api/cards")
-    public void createCard(@RequestBody Map<String,Object> map) {
+    public void createCard(@RequestBody Map<String, Object> map) {
         System.out.println(colRepository.findByColName(map.get("colName").toString()).orElse(null));
         Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
         List<Card> cards = col.getCards();
@@ -27,13 +30,14 @@ public class TodoController {
     }
 
     @PostMapping("/api/cards/update")
-    public void updateCard(@RequestBody Map<String,Object> map) {
+    public void updateCard(@RequestBody Map<String, Object> map) {
         Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
         List<Card> cards = col.getCards();
         Card card = cards.get((int) map.get("row") - 1);
         card.update(map);
         colRepository.save(col);
     }
+
     @PostMapping("/api/cards/move")
     public void moveCard(@RequestBody Map<String, Object> map) {
         String originColName = map.get("originColName").toString();
@@ -56,5 +60,12 @@ public class TodoController {
 
         colRepository.save(originCol);
         colRepository.save(destinationCol);
+    }
+
+    @PostMapping("/api/cards/delete")
+    public void deleteCard(@RequestBody Map<String, Object> map) {
+        Card card = cardRepository.findById(Long.parseLong(map.get("id").toString())).orElse(null);
+        card.delete();
+        cardRepository.save(card);
     }
 }
