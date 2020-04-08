@@ -2,7 +2,6 @@ package todo3.codesquad;
 
 import org.springframework.data.annotation.Id;
 
-import javax.smartcardio.Card;
 import java.util.List;
 
 public class Col {
