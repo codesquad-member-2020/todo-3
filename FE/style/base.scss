@@ -1,0 +1,19 @@
+$font-stack: (
+  '-apple-system',
+  'BlinkMacSystemFont',
+  'Helvetica',
+  'Arial',
+  sans-serif
+);
+
+$color-violets: hsl(252,87%,68%);
+$color-medium-purple: hsl(260,60%,65%);
+$color-amethyst: hsl(270,50%,60%);
+$color-rich-lavender: hsl(276,51%,62%);
+$color-middle-blue-purple: hsl(260,37%,60%);
+
+$main-color: $color-violets;
+$color-rich-lavender-opacity: hsla(276,51%,62%, 0.2);
+$color-middle-blue-purple-opacity: hsla(260,37%,60%,0.3);
+$add-button-color: #7f78d2;
+$cancel-button-color: hsl(219,17,96);
