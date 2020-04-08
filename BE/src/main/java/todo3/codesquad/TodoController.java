@@ -34,4 +34,27 @@ public class TodoController {
         card.update(map);
         colRepository.save(col);
     }
+    @PostMapping("/api/cards/move")
+    public void moveCard(@RequestBody Map<String, Object> map) {
+        String originColName = map.get("originColName").toString();
+        String destinationColName = map.get("destinationColName").toString();
+        int originRow = Integer.parseInt(map.get("originRow").toString());
+        int destinationRow = Integer.parseInt(map.get("destinationRow").toString());
+
+        Col originCol = colRepository.findByColName(originColName).orElse(null);
+        Col destinationCol = colRepository.findByColName(destinationColName).orElse(null);
+
+        List<Card> originCards = originCol.getCards();
+        List<Card> destinationCards = destinationCol.getCards();
+
+        Card originCard = originCards.get(originRow - 1);
+        originCards.remove(originRow - 1);
+        if(destinationCards.size() > destinationRow -1){
+            destinationCards.add(destinationRow - 1,originCard);
+        }
+        destinationCards.add(originCard);
+
+        colRepository.save(originCol);
+        colRepository.save(destinationCol);
+    }
 }
