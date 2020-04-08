@@ -6,9 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ColRepository extends CrudRepository<Col, Long> {
-
-    @Query("SELECT * FROM col WHERE col_name = :colName")
-    Optional<Col> findByColName(@Param("colName") String colName);
-
+public interface CardRepository extends CrudRepository<Card,Long> {
+//    @Query("SELECT * FROM card WHERE id = :colName")
+//    Optional<Card> findById(@Param("colName") String colName);
 }

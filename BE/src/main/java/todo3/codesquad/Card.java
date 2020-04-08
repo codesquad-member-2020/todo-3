@@ -45,4 +45,8 @@ public class Card {
         this.writer = map.get("writer").toString();
         this.writtenTime = LocalDateTime.now();
     }
+
+    public void delete(){
+        this.deleted = true;
+    }
 }
