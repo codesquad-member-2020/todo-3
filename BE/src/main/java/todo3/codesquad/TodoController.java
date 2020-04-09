@@ -75,7 +75,18 @@ public class TodoController {
 
     @PostMapping("/api/cards/delete")
     public void deleteCard(@RequestBody Map<String, Object> map) {
+        Long cardId = Long.parseLong(map.get("id").toString());
+        Long colId = cardRepository.findColByCardId(cardId);
         Card card = cardRepository.findById(Long.parseLong(map.get("id").toString())).orElse(null);
+        Col col = colRepository.findById(colId).orElse(null);
+        if(card.getRow()!=col.getCards().size()) {
+            //마지막 위치가 아닐 때 카드 삭제
+            for(int i=card.getRow(); i<col.getCards().size(); i++) {
+                Card otherCard = col.getCards().get(i);
+                otherCard.setRow(otherCard.getRow()-1);
+            }
+            colRepository.save(col);
+        }
         card.delete();
         cardRepository.save(card);
     }
@@ -91,7 +102,6 @@ public class TodoController {
             Response response = new Response(columnName,tempCards);
             resultResponse.add(response);
         }
-
 
         return new ResponseEntity<>(new ResponseMessage(resultResponse), HttpStatus.OK);
     }

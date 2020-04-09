@@ -16,7 +16,7 @@ import java.util.Map;
 public class Card {
 
     @Id
-    private int id;
+    private Long id;
 
     private int row;
 
