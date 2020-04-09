@@ -14,7 +14,7 @@ class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDoTableViewDataManager.totalToDoCardsCount() ?? 5
+        return toDoTableViewDataManager.totalToDoCardsCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

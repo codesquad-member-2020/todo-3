@@ -8,6 +8,12 @@
 
 import Foundation
 
+enum Column {
+    static let ToDoColumn = "Todo"
+    static let InProgressColumn = "Doing"
+    static let DoneColumn = "Done"
+}
+
 struct ToDoCardInfo: Codable {
     let responseMessage: [ToDoCard]
 }
