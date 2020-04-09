@@ -10,12 +10,11 @@ import UIKit
 
 class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
     
-    private let toDoTableViewDataManager = ToDoTableViewDataManager()
-    private let codableManager = CodableManager()
+    private let toDoTableViewDataManager = DataManager()
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return toDoTableViewDataManager.totalToDoCardsCount() ?? 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
