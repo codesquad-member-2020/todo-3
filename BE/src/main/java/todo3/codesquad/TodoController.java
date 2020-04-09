@@ -1,7 +1,5 @@
 package todo3.codesquad;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +23,6 @@ public class TodoController {
 
     @PostMapping("/api/cards")
     public void createCard(@RequestBody Map<String, Object> map) {
-        System.out.println(colRepository.findByColName(map.get("colName").toString()).orElse(null));
         Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
         List<Card> cards = col.getCards();
         Card card = new Card(map);
@@ -56,10 +52,10 @@ public class TodoController {
         List<Card> originCards = originCol.getCards();
         List<Card> destinationCards = destinationCol.getCards();
 
-        if(originRow > originCards.size()){
+        if (originRow > originCards.size()) {
             System.out.println("멀 옴기는거야?");
         }
-        if(destinationRow > destinationCards.size()){
+        if (destinationRow > destinationCards.size()) {
             System.out.println("어디다 옴기는거야?");
         }
         Card movedCard = originCards.get(originRow - 1);
@@ -87,8 +83,18 @@ public class TodoController {
     }
 
     @GetMapping("/api/cards/show")
-    public ResponseEntity<ResponseMessage> showCards()  {
-        List<Col> colList = colRepository.findByDeleted();
-        return new ResponseEntity<>(new ResponseMessage(colList), HttpStatus.OK);
+    public ResponseEntity<ResponseMessage> showCards() {
+        List<Response> resultResponse = new ArrayList<>();
+        List<Integer> colNames = colRepository.findColIdByNotDeleted();
+        for (int i = 0 ; i < colNames.size() ; i++){
+            Integer idx = colNames.get(i);
+            String columnName = colRepository.findColNameByNotDeleted(idx);
+            List<Card> tempCards = cardRepository.findAllByColumCard(idx);
+            Response response = new Response(columnName,tempCards);
+            resultResponse.add(response);
+        }
+
+
+        return new ResponseEntity<>(new ResponseMessage(resultResponse), HttpStatus.OK);
     }
 }
