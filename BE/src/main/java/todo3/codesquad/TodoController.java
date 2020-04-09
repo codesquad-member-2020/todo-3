@@ -87,7 +87,7 @@ public class TodoController {
         for (int i = 0 ; i < colNames.size() ; i++){
             Integer idx = colNames.get(i);
             String columnName = colRepository.findColNameByNotDeleted(idx);
-            List<Card> tempCards = cardRepository.findAllByColumCard(idx);
+            List<Card> tempCards = cardRepository.findAllByColumnCard(idx);
             Response response = new Response(columnName,tempCards);
             resultResponse.add(response);
         }

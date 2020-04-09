@@ -8,6 +8,6 @@ import java.util.List;
 
 
 public interface CardRepository extends CrudRepository<Card,Long> {
-    @Query("select * from card where card.deleted = false and card.col = :id")
-    List<Card> findAllByColumCard(@Param("id") Integer id);
+    @Query("select * from card where card.deleted = false and card.col = :id order by card.row asc")
+    List<Card> findAllByColumnCard(@Param("id") Integer id);
 }
