@@ -60,6 +60,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="doneListContainerView" destination="ivY-Yd-mZP" id="baj-xJ-zVt"/>
+                        <outlet property="inProgressListContainerView" destination="oB1-uL-wfF" id="1mc-hi-6uy"/>
+                        <outlet property="toDoListContainerView" destination="ATt-Dq-VT9" id="Wax-Sb-nHy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -68,11 +73,12 @@
         <!--To Do Manager View Controller-->
         <scene sceneID="or8-a7-jSa">
             <objects>
-                <viewController id="gO2-aU-0ae" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="rTs-0Y-PNe">
+                <viewController storyboardIdentifier="toDoListVC" id="gO2-aU-0ae" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rTs-0Y-PNe" customClass="UITableView">
                         <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Dq5-tp-Sun"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S6V-3o-Brl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -82,11 +88,12 @@
         <!--To Do Manager View Controller-->
         <scene sceneID="BlR-ZH-jdC">
             <objects>
-                <viewController id="WtZ-qU-WVd" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="2Bg-oW-WZf">
+                <viewController storyboardIdentifier="inProgressListVC" id="WtZ-qU-WVd" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2Bg-oW-WZf" customClass="UITableView">
                         <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="LZh-cq-IkF"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ok3-YU-IFh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -96,11 +103,12 @@
         <!--To Do Manager View Controller-->
         <scene sceneID="0g1-Uy-ESG">
             <objects>
-                <viewController id="GL6-pG-DWe" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Tvp-hh-Etj">
+                <viewController storyboardIdentifier="doneListVC" id="GL6-pG-DWe" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Tvp-hh-Etj" customClass="UITableView">
                         <rect key="frame" x="0.0" y="0.0" width="334" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="h8A-vI-70A"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2kV-Sb-0zA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -110,7 +118,6 @@
         <!--Navigation Controller-->
         <scene sceneID="8ZU-5m-Rdg">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cmo-wT-dBM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5fG-S6-6wN" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lJI-3N-P82">
@@ -122,6 +129,7 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="VcN-FW-OaT"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cmo-wT-dBM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138.66906474820144" y="137.41007194244605"/>
         </scene>
