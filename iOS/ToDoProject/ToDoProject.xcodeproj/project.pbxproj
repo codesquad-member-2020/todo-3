@@ -91,8 +91,8 @@
 		6A748668243AEFB200D89B3D /* ToDoProject */ = {
 			isa = PBXGroup;
 			children = (
+				6A820543243F321F0057780D /* Controller */,
 				6A74868D243B483800D89B3D /* Model */,
-				6A74868C243B482600D89B3D /* ViewModel */,
 				6A74868B243B481600D89B3D /* View */,
 				6A748669243AEFB200D89B3D /* AppDelegate.swift */,
 				6A74866B243AEFB200D89B3D /* SceneDelegate.swift */,
@@ -116,20 +116,10 @@
 		6A74868B243B481600D89B3D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				6A74866D243AEFB200D89B3D /* MasterViewController.swift */,
-				6A74868E243B48BD00D89B3D /* ToDoManagerViewController.swift */,
 				6A748694243B5C5800D89B3D /* ToDoTableViewCell.swift */,
 				6A748696243B5FF900D89B3D /* ToDoTableView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		6A74868C243B482600D89B3D /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				6A748698243B615C00D89B3D /* ToDoTableViewDataSource.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		6A74868D243B483800D89B3D /* Model */ = {
@@ -137,8 +127,18 @@
 			children = (
 				6A82053F243F0D340057780D /* DataManager.swift */,
 				6A820541243F0D9D0057780D /* ToDoCardInfo.swift */,
+				6A748698243B615C00D89B3D /* ToDoTableViewDataSource.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		6A820543243F321F0057780D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6A74868E243B48BD00D89B3D /* ToDoManagerViewController.swift */,
+				6A74866D243AEFB200D89B3D /* MasterViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
