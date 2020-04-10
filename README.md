@@ -11,3 +11,5 @@ TODO 리스트 서비스 - 3팀
 ## Index
 
 - **[Ground Rule](../../wiki/Ground-Rule)**
+- **[API Documentation](../../wiki/API-Documentation)**
+- **[Scrum](https://docs.google.com/spreadsheets/d/1IVWN01m2gqBKHYESzh7-0WSiWNYghZElgEYEqncGGDc/edit#gid=0)**
