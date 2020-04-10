@@ -1,4 +1,4 @@
-package todo3.codesquad;
+package todo3.codesquad.message;
 
 import lombok.Getter;
 import lombok.Setter;

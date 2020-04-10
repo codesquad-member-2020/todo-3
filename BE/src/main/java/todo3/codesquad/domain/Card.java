@@ -1,4 +1,4 @@
-package todo3.codesquad;
+package todo3.codesquad.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
