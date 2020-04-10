@@ -31,8 +31,13 @@ public class Card {
     private LocalDateTime writtenTime;
 
     public Card(Map<String, Object> map) {
+        if(map.get("title") == null){
+           this.title = "New Card";
+        }
+        else{
+            this.title = map.get("title").toString();
+        }
         this.row = (int) map.get("row");
-        this.title = map.get("title").toString();
         this.contents = map.get("contents").toString();
         this.writer = map.get("writer").toString();
         this.deleted = false;

@@ -5,9 +5,11 @@ import lombok.Setter;
 
 @Getter @Setter
 public class ResponseMessage {
-    private Object responseMessage;
+    private String responseMessage;
+    private Object responseData;
 
-    public ResponseMessage(Object result) {
-        this.responseMessage = result;
+    public ResponseMessage(String responseMessage,Object responseData) {
+        this.responseMessage = responseMessage;
+        this.responseData = responseData;
     }
 }
