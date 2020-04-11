@@ -8,23 +8,22 @@
 
 import Foundation
 
-enum Column {
-    static let ToDoColumn = "Todo"
-    static let InProgressColumn = "Doing"
-    static let DoneColumn = "Done"
+struct ToDoCardInfo: Codable {
+    let responseMessage: String
+    let responseData: [ToDoCard]
 }
 
-struct ToDoCardInfo: Codable {
-    let responseMessage: [ToDoCard]
-}
 struct ToDoCard: Codable {
     let colName: String
-    let columnData: [Card]
+    let cardList: [Card]
 }
+
 struct Card: Codable {
     let id: Int
-    let index: Int
+    let row: Int
     let title: String
     let contents: String
     let writer: String
+    let deleted: Bool
+    let writtenTime: String
 }
