@@ -13,36 +13,28 @@ class MasterViewController: UIViewController {
     @IBOutlet weak var toDoListContainerView: UIView!
     @IBOutlet weak var inProgressListContainerView: UIView!
     @IBOutlet weak var doneListContainerView: UIView!
-    
     private var toDoListVC: ToDoManagerViewController!
     private var inProgressListVC: ToDoManagerViewController!
     private var doneListVC: ToDoManagerViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupChildViewControllers()
+        DataManager.requestData()
     }
     
-    private func setupChildViewControllers() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let toDoListVC = storyboard.instantiateViewController(withIdentifier: "toDoListVC") as! ToDoManagerViewController
-        addChild(toDoListVC)
-        view.addSubview(toDoListContainerView)
-        self.toDoListVC = toDoListVC
-        
-        let inProgressListVC = storyboard.instantiateViewController(withIdentifier: "inProgressListVC") as! ToDoManagerViewController
-        addChild(inProgressListVC)
-        view.addSubview(inProgressListContainerView)
-        self.inProgressListVC = inProgressListVC
-
-        let doneListVC = storyboard.instantiateViewController(withIdentifier: "doneListVC") as! ToDoManagerViewController
-        addChild(doneListVC)
-        view.addSubview(doneListContainerView)
-        self.doneListVC = doneListVC
-    }
-    
-    private func setupHeader() {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Column.ToDoColumn{
+            let toDoVC = segue.destination as! ToDoManagerViewController
+            toDoVC.headerTitle = Column.ToDoColumn
+        }
+        if segue.identifier == Column.InProgressColumn{
+            let toDoVC = segue.destination as! ToDoManagerViewController
+            toDoVC.headerTitle = Column.InProgressColumn
+        }
+        if segue.identifier == Column.DoneColumn{
+            let toDoVC = segue.destination as! ToDoManagerViewController
+            toDoVC.headerTitle = Column.DoneColumn
+        }
     }
 }
 
