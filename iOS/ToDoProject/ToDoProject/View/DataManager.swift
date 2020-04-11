@@ -9,49 +9,31 @@
 import Foundation
 
 class DataManager {
-    private let microDustURL = "https://49f69bb9-2cf6-4590-af83-a8890ac67d7c.mock.pstmn.io/requestCardList"
     
-    private(set) var totalToDoCards: ToDoCardInfo?
-    private var toDoCards: [Card]?
-    private var inProgressCards: [Card]?
-    private var doneCards: [Card]?
+    private static let toDoCardsURL = "http://15.164.78.121:8080/api/cards/show"
+    static let ToDoCardsDecodedNotification = NSNotification.Name("ToDoCardsDecodedNotification")
+    static var totalToDoCards: ToDoCardInfo?
     
-    init() {
-        decodeJson()
-        distributeCardData()
+    static func totalToDoCardsCount() -> Int?{
+        return totalToDoCards?.responseData[0].cardList.count ?? 0
     }
     
-    func totalToDoCardsCount() -> Int?{
-        return totalToDoCards?.responseMessage.count
-    }
-    
-    private func decodeJson(){
-        guard let url = URL(string: microDustURL) else { return }
+    static func requestData(){
+        guard let url = URL(string: DataManager.toDoCardsURL) else { return }
         URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard error == nil else { self.totalToDoCards = nil; return }
-            guard let data = data else { self.totalToDoCards = nil; return }
+            guard error == nil else { return }
+            guard let data = data else { return }
             let decoder = JSONDecoder()
             do{
                 self.totalToDoCards = try decoder.decode(ToDoCardInfo.self, from: data)
+                self.sendNotification()
             } catch {
                 self.totalToDoCards = nil
             }
         }.resume()
     }
     
-    private func distributeCardData(){
-        self.totalToDoCards?.responseMessage.forEach{ column in
-            
-            if column.colName == Column.ToDoColumn {
-                self.toDoCards = column.columnData
-                print(self.toDoCards)
-            }
-            if column.colName == Column.InProgressColumn {
-                self.inProgressCards = column.columnData
-            }
-            if column.colName == Column.DoneColumn{
-                self.doneCards = column.columnData
-            }
-        }
+    private static func sendNotification() {
+        NotificationCenter.default.post(name: DataManager.ToDoCardsDecodedNotification, object: nil)
     }
 }
