@@ -20,19 +20,19 @@
                                 <rect key="frame" x="30" y="50" width="333.5" height="734"/>
                                 <viewLayoutGuide key="safeArea" id="pKK-yY-noh"/>
                                 <connections>
-                                    <segue destination="gO2-aU-0ae" kind="embed" id="Pyt-uw-FK4"/>
+                                    <segue destination="gO2-aU-0ae" kind="embed" identifier="To Do" id="Pyt-uw-FK4"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ivY-Yd-mZP">
                                 <rect key="frame" x="749" y="50" width="334" height="734"/>
                                 <connections>
-                                    <segue destination="GL6-pG-DWe" kind="embed" id="wFa-Om-hdK"/>
+                                    <segue destination="gO2-aU-0ae" kind="embed" identifier="Done" id="SWS-p4-rBa"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oB1-uL-wfF">
                                 <rect key="frame" x="390" y="50" width="333.5" height="734"/>
                                 <connections>
-                                    <segue destination="WtZ-qU-WVd" kind="embed" id="piL-j3-Uek"/>
+                                    <segue destination="gO2-aU-0ae" kind="embed" identifier="In Progress" id="EhA-KA-QNR"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -60,6 +60,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="doneListContainerView" destination="ivY-Yd-mZP" id="baj-xJ-zVt"/>
+                        <outlet property="inProgressListContainerView" destination="oB1-uL-wfF" id="1mc-hi-6uy"/>
+                        <outlet property="toDoListContainerView" destination="ATt-Dq-VT9" id="Wax-Sb-nHy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -68,49 +73,43 @@
         <!--To Do Manager View Controller-->
         <scene sceneID="or8-a7-jSa">
             <objects>
-                <viewController id="gO2-aU-0ae" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="rTs-0Y-PNe">
+                <viewController storyboardIdentifier="toDoListVC" id="gO2-aU-0ae" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rTs-0Y-PNe" customClass="UITableView">
                         <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YJq-we-Wq8">
+                                <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="todoCell" id="eVF-zg-lIK" customClass="ToDoTableViewCell" customModule="ToDoProject" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="333.5" height="43.5"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eVF-zg-lIK" id="vg7-GW-meT">
+                                            <rect key="frame" x="0.0" y="0.0" width="333.5" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="YJq-we-Wq8" secondAttribute="trailing" id="6Mb-Y3-eZe"/>
+                            <constraint firstItem="YJq-we-Wq8" firstAttribute="top" secondItem="Dq5-tp-Sun" secondAttribute="top" id="lJD-ck-cop"/>
+                            <constraint firstItem="YJq-we-Wq8" firstAttribute="leading" secondItem="Dq5-tp-Sun" secondAttribute="leading" id="v27-tW-y3R"/>
+                            <constraint firstItem="Dq5-tp-Sun" firstAttribute="bottom" secondItem="YJq-we-Wq8" secondAttribute="bottom" id="xge-8N-zcm"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Dq5-tp-Sun"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S6V-3o-Brl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="628" y="881"/>
-        </scene>
-        <!--To Do Manager View Controller-->
-        <scene sceneID="BlR-ZH-jdC">
-            <objects>
-                <viewController id="WtZ-qU-WVd" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="2Bg-oW-WZf">
-                        <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ok3-YU-IFh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="853" y="881"/>
-        </scene>
-        <!--To Do Manager View Controller-->
-        <scene sceneID="0g1-Uy-ESG">
-            <objects>
-                <viewController id="GL6-pG-DWe" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Tvp-hh-Etj">
-                        <rect key="frame" x="0.0" y="0.0" width="334" height="734"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2kV-Sb-0zA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1063" y="881"/>
+            <point key="canvasLocation" x="853" y="958"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8ZU-5m-Rdg">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="cmo-wT-dBM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5fG-S6-6wN" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lJI-3N-P82">
@@ -122,10 +121,14 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="VcN-FW-OaT"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cmo-wT-dBM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138.66906474820144" y="137.41007194244605"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="EhA-KA-QNR"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <namedColor name="violetsAreBlue">
             <color red="0.51372549019607838" green="0.40000000000000002" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

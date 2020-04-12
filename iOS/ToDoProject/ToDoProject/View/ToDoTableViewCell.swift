@@ -2,24 +2,19 @@
 //  ToDoTableViewCell.swift
 //  ToDoProject
 //
-//  Created by Keunna Lee on 2020/04/06.
+//  Created by Keunna Lee on 2020/04/09.
 //  Copyright © 2020 dev-Lena. All rights reserved.
 //
 
 import UIKit
 
 class ToDoTableViewCell: UITableViewCell {
-    
-    static var identifier = "todoCell"
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
 
+    static let identifier = "todoCell"
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var authorLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
