@@ -12,8 +12,7 @@ class ToDoManagerViewController: UITableViewController {
     
     var headerTitle = ""
     var numberOfCard = ""
-    var cardList: [Card]?
-    var header = TableViewHeader()
+    private var cardList = [Card]()
     private let tableViewHeaderHeight = CGFloat(50)
     private let dataSource = ToDoTableViewDataSource()
     private let nib = UINib(nibName: "ToDoTableViewCell", bundle: nil)
@@ -33,7 +32,6 @@ class ToDoManagerViewController: UITableViewController {
         let header = TableViewHeader()
         header.titleLabel.text = headerTitle
         header.numberLabel.text = numberOfCard
-        self.header = header
         return header
     }
     
