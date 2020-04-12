@@ -1,21 +1,24 @@
 package todo3.codesquad.security;
 
-import javax.annotation.PostConstruct;
-import java.util.Base64;
-import java.util.List;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import java.security.Key;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class JwtTokenProvider {
-    private String secretKey = "todo3";
-
-    private long tokenValidTime = 30 * 24 * 60 * 1000L;
-
-    @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+    public String JwtTokenMaker(String userName){
+        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        String jws = Jwts.builder()
+                .setHeaderParam("typ","JWT")
+                .setSubject("userName")
+                .claim("userName",userName)
+                .setExpiration(new Date(System.currentTimeMillis() + 1 * (1000 * 60 * 60 * 24)))
+                .signWith(key,SignatureAlgorithm.HS256)
+                .compact();
+        return jws;
     }
-
-    public String createToken(String userPk, List<String> roles) {
-        return "";
-    }
-
 }
