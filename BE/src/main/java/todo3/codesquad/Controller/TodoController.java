@@ -30,10 +30,27 @@ import java.util.Map;
 public class TodoController {
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     ColRepository colRepository;
 
     @Autowired
     CardRepository cardRepository;
+
+    @PostMapping("/api/login")
+    public ResponseEntity<ResponseMessage> userLogin(@RequestBody Map<String,Object> map) {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        if (map == null){
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.FAILED_LOGIN_MESSAGE, null), HttpStatus.OK);
+        }
+        String userId = map.get("userId").toString();
+        String userName = userRepository.findByUserId(userId);
+        if(userName == null){
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.FAILED_LOGIN_MESSAGE, null), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_LOGIN, jwtTokenProvider.JwtTokenMaker(userName)), HttpStatus.OK);
+    }
 
     @PostMapping("/api/cards")
     public ResponseEntity<ResponseMessage> createCard(@RequestBody Map<String, Object> map) {
