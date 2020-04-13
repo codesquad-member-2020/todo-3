@@ -27,10 +27,12 @@ INSERT INTO card (row, title, contents, writer, deleted, written_time, col, col_
 VALUES (3, "title3", "contents3", "todo3people", false, now(), 3, 2);
 
 INSERT INTO user(user_name, user_id, user_password)
-values ("alexName", "alexID", "alexPW");
+values ("alex", "alexID", "alexPW");
 INSERT INTO user(user_name, user_id, user_password)
-values ("mochaName", "mochaID", "mochaPW");
+values ("mocha", "mochaID", "mochaPW");
 INSERT INTO user(user_name, user_id, user_password)
-values ("ariName", "ariID", "ariPW");
+values ("ari", "ariID", "ariPW");
 INSERT INTO user(user_name, user_id, user_password)
-values ("lenaName", "lenaID", "lenaPW");
+values ("lena", "lenaID", "lenaPW");
+INSERT INTO user(user_name, user_id, user_password)
+values ("unknown", "unknownID", "unknownPW");

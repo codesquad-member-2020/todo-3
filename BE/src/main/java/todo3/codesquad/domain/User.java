@@ -10,8 +10,8 @@ public class User {
 
     @Id
     private Long id;
-    private String userName;
     private String userId;
+    private String userName;
     private String userPassword;
 
     public User(String userName, String userId, String userPassword) {
