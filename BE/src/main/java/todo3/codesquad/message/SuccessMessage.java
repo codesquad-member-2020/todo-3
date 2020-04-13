@@ -7,4 +7,5 @@ public class SuccessMessage {
     public static final String SUCCESS_UPDATE = "Update data is Success";
     public static final String SUCCESS_MOVE = "Move data is Success";
     public static final String SUCCESS_DELETE = "Delete data is Success";
+    public static final String SUCCESS_COL = "Column data is Success";
 }

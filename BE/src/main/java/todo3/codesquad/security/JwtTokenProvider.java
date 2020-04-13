@@ -22,7 +22,7 @@ public class JwtTokenProvider {
 
         Long expiredTime = 1000 * 60 * 60 * 24L;
         Date now = new Date();
-        now.setTime(now.getTime()+expiredTime);
+        now.setTime(now.getTime()-expiredTime);
 
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(secretKey);
         Key key = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());

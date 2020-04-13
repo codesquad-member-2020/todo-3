@@ -13,6 +13,8 @@ public class JwtTokenDecode {
         try{
             Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary("todo"))
                     .parseClaimsJws(jwt).getBody();
+
+            System.out.println(claims);
             return true;
         } catch (ExpressionException e){
             return false;
