@@ -148,6 +148,7 @@ public class TodoController {
 
     @GetMapping("/api/columns/{columnName}")
     public ResponseEntity<ResponseMessage> showColumn(@PathVariable String columnName) {
+        columnName = columnName.replace("_"," ");
         Col col = colRepository.findByColName(columnName).orElse(null);
         List<Card> cards = col.getCards();
         List<Card> newCards = new ArrayList<>();
