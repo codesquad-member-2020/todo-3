@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
-    private String TOKEN_KEY_IN_HEADER = "token";
+    private String TOKEN_KEY_IN_HEADER = "Authorization";
 
     private static final Logger log =
             LoggerFactory.getLogger(LoginInterceptor.class);
@@ -20,18 +20,19 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     private static final String METHOD = "METHOD";
 
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         request.setAttribute(TIME, System.currentTimeMillis());
         request.setAttribute(URL, request.getRequestURL());
         request.setAttribute(METHOD, request.getMethod());
         String givenToken = request.getHeader(TOKEN_KEY_IN_HEADER);
-
-        if(givenToken == null){
+        if (givenToken == null) {
             log.debug("There is no token");
             return false;
         }
+
+        log.debug("{}", givenToken);
+        givenToken = givenToken.replace("Bearer ", "");
 
         JwtTokenDecode jwtTokenDecode = new JwtTokenDecode();
 
@@ -40,7 +41,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        long startTime = (long)request.getAttribute(TIME);
+        long startTime = (long) request.getAttribute(TIME);
         log.debug("{} {} {}", request.getAttribute(METHOD), request.getAttribute(URL), System.currentTimeMillis() - startTime);
     }
 }
