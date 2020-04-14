@@ -34,8 +34,8 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20090211'
 // JWT 설정
     compile 'io.jsonwebtoken:jjwt:0.9.0'
-
-
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.9.5'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.9.5'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

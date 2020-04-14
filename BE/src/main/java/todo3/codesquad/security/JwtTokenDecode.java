@@ -4,20 +4,28 @@ package todo3.codesquad.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.expression.ExpressionException;
 
 import javax.xml.bind.DatatypeConverter;
 
 public class JwtTokenDecode {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(JwtTokenDecode.class);
+
     public boolean checkJwt(String jwt) {
         try{
             Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary("todo"))
                     .parseClaimsJws(jwt).getBody();
-
+            log.debug("{}", claims);
             return true;
         } catch (ExpressionException e){
+            log.debug("Token is timed out");
             return false;
         } catch (JwtException e){
+            log.debug("Token is not verified");
             return false;
         }
     }
