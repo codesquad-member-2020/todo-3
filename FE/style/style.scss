@@ -282,3 +282,40 @@ header {
     }
   }
 }
+
+.modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  &::after {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+  }
+
+  > div {
+    z-index: 11;
+    position: relative;
+    background: #fff;
+    padding: 20px 40px;
+    text-align: center;
+  }
+
+  .close-btn {
+    width: 100%;
+    padding: 5px;
+    background: lavender;
+    margin-top: 20px;
+  }
+}

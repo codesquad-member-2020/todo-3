@@ -12,7 +12,15 @@ export const fetchPOSTJSON = async (url, data) => {
       'content-type' : 'application/json; charset=utf-8'
     },
     body: JSON.stringify(data)
+  }).then(response => {
+    return response.json();
   })
+}
+
+export const fetchDELETEJSON = async (url) => {
+  return await fetch(url, {
+    methode: 'DELETE'
+  }).then((response) => response.json());
 }
 
 // export const requestDataShow = async () => {

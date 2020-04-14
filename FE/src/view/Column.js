@@ -2,8 +2,6 @@ import { fetchGETJSON, fetchPOSTJSON } from '../data/http.js';
 import { getElement, getElements, addClass, removeClass, hasClass, show, hide } from '../util/dom.js';
 import { Card } from './Card.js';
 import { URL } from '../util/constant.js';
-import { dragDropHandle } from './dragDropEvent.js';
-
 
 export class Column {
   constructor(name, columnIndex) {
@@ -18,7 +16,7 @@ export class Column {
     const container = getElement('.container');
     const data = await fetchGETJSON(URL.SHOW);
     const initalHTML = await this.render(data);
-    const cardList = data.responseMessage[this.index].cardList;
+    const cardList = data.responseData[this.index].cardList;
     this.cardLength = cardList.length;
 
     container.insertAdjacentHTML('beforeend', initalHTML);
@@ -27,8 +25,8 @@ export class Column {
 
     if(!this.cardLength) return;
 
-    cardList.forEach((content) => {
-      this.columnEle.insertAdjacentHTML('beforeend', new Card(content).render());
+    cardList.forEach((card) => {
+      this.columnEle.insertAdjacentHTML('beforeend', new Card(this.columnEle, card).render());
     });
   }
 
@@ -52,18 +50,21 @@ export class Column {
   async addCardHandle(textareaEle) {
     const targetBtn = event.currentTarget;
     if(hasClass(targetBtn, 'disable')) return event.preventDefault;
+    const textareaValue = textareaEle.value.replace(/(?:\r\n|\r|\n)/g, '<br />');
     const data = {
-      "row" : this.cardLength + 1,
-      "contents" : textareaEle.value,
+      "row" : ++this.cardLength,
+      "contents" : textareaValue,
       "writer" : "ari",
       "colName" : this.columnName
     }
-    const addData = await fetchPOSTJSON(URL.ADD, data);
-    data.id = 22 //dom에 임시로 넣는 아이디값
-    if(addData.status === 200) {
+
+    const addData = await fetchPOSTJSON(URL.DEFAULT, data);
+
+    if(addData.responseMessage === 'Create data is Success') {
       textareaEle.value = '';
       addClass(targetBtn, 'disable');
-      this.columnEle.insertAdjacentHTML('beforeend', new Card(data).render());
+      this.columnEle.insertAdjacentHTML('beforeend', new Card(this.columnEle, addData.responseData).render());
+      this.columnEle.querySelector('.card-length').textContent = this.cardLength;
     };
   }
 
@@ -82,7 +83,7 @@ export class Column {
       <div class="column">
         <div class="column-top">
           <div class="column-title">
-            <strong class="column-name"><span class="card-length">${data.responseMessage[this.index].cardList.length}</span>${this.columnName}</strong>
+            <strong class="column-name"><span class="card-length">${data.responseData[this.index].cardList.length}</span>${this.columnName}</strong>
             <button type="button" class="content-add-btn"><span class="blind">추가</span></button>
           </div>
           <div class="column-note">
