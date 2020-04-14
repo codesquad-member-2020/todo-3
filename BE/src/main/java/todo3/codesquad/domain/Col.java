@@ -16,6 +16,8 @@ public class Col {
 
     private String colName;
 
+    private String categoryName;
+
     private boolean deleted;
 
     private List<Card> cards;

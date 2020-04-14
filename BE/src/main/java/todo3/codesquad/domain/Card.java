@@ -31,13 +31,11 @@ public class Card {
     private LocalDateTime writtenTime;
 
     public Card(Map<String, Object> map) {
-        if(map.get("title") == null){
-           this.title = "New Card";
-        }
-        else{
+        if (map.get("title") == null) {
+            this.title = "New Card";
+        } else {
             this.title = map.get("title").toString();
         }
-        this.row = (int) map.get("row");
         this.contents = map.get("contents").toString();
         this.writer = map.get("writer").toString();
         this.deleted = false;
@@ -45,13 +43,19 @@ public class Card {
     }
 
     public void update(Map<String, Object> map) {
-        this.title = map.get("title").toString();
-        this.contents = map.get("contents").toString();
-        this.writer = map.get("writer").toString();
+        if (map.get("title") != null) {
+            this.title = map.get("title").toString();
+        }
+        if (map.get("contents") != null) {
+            this.contents = map.get("contents").toString();
+        }
+        if (map.get("writer") != null) {
+            this.writer = map.get("writer").toString();
+        }
         this.writtenTime = LocalDateTime.now();
     }
 
-    public void delete(){
+    public void delete() {
         this.deleted = true;
     }
 

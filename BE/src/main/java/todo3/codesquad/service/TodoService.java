@@ -9,8 +9,6 @@ import todo3.codesquad.domain.ColRepository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class TodoService {
@@ -23,8 +21,16 @@ public class TodoService {
 
     @Transactional
     public Card createCard(Map<String, Object> cardData) {
-        String categoryName = cardData.get("categoryName").toString();
-        Col col = colRepository.findByCategoryName(categoryName).orElse(null);
+        if (cardData.get("colName") == null) {
+            return null;
+        }
+
+        String colName = cardData.get("colName").toString();
+        Col col = colRepository.findByCategoryName(colName).orElse(null);
+
+        if (col.getCards() == null) {
+            return null;
+        }
         List<Card> cards = col.getCards();
         Card card = new Card(cardData);
         cards.add(0, card);
@@ -40,17 +46,22 @@ public class TodoService {
     public Card updateCard(Long updateCardId, @RequestBody Map<String, Object> map) {
         String colName = map.get("colName").toString();
         Card updateCard = new Card();
+        boolean checkCardId = true;
         Col col = colRepository.findByColName(colName).orElse(null);
         if (col == null) {
             return null;
         }
         List<Card> cards = col.getCards();
-        for (int i = 0; i < cards.size() ; i++) {
+        for (int i = 0; i < cards.size(); i++) {
             Long cardId = cards.get(i).getId();
-            if (cardId.equals(updateCardId)){
+            if (cardId.equals(updateCardId)) {
                 updateCard = cards.get(i);
                 updateCard.update(map);
+                checkCardId = false;
             }
+        }
+        if (checkCardId) {
+            return null;
         }
         colRepository.save(col);
         return updateCard;

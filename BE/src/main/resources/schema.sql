@@ -6,6 +6,7 @@ CREATE TABLE col
 (
     id       int primary key auto_increment,
     col_name VARCHAR(100) not null,
+    category_name varchar(100) not null,
     deleted  boolean
 );
 

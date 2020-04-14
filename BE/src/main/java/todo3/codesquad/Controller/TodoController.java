@@ -16,8 +16,8 @@ import todo3.codesquad.message.SuccessMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import todo3.codesquad.security.JwtTokenProvider;
+import todo3.codesquad.service.TodoService;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +27,11 @@ import java.util.Map;
 public class TodoController {
 
     private static final Logger log = LoggerFactory.getLogger(TodoController.class);
+    private TodoService todoService;
+
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
+    }
 
     @Autowired
     UserRepository userRepository;
@@ -47,33 +52,27 @@ public class TodoController {
     }
 
     @PostMapping("/api/cards")
-    public ResponseEntity<ResponseMessage> createCard(@RequestBody Map<String, Object> map) {
-        Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
-        if (col == null) {
-            return new ResponseEntity<>(new ResponseMessage(FailedMessage.NULL_DATA_MESSAGE, null), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ResponseMessage> createCard2(@RequestBody Map<String, Object> map) {
+        Card newCard = todoService.createCard(map);
+        if(newCard == null){
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);
         }
-        List<Card> cards = col.getCards();
-        Card card = new Card(map);
-        cards.add(card);
-        colRepository.save(col);
-        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_CREATE, card), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_CREATE, newCard), HttpStatus.OK);
     }
 
-    @PutMapping("/api/cards")
-    public ResponseEntity<ResponseMessage> updateCard(@RequestBody Map<String, Object> map) {
-        Col col = colRepository.findByColName(map.get("colName").toString()).orElse(null);
-        if (col == null) {
-            return new ResponseEntity<>(new ResponseMessage(FailedMessage.NULL_DATA_MESSAGE, null), HttpStatus.NOT_FOUND);
+
+//    @PutMapping("/api/cards/{cardId}")
+    @PutMapping("/test/{updateCardId}")
+    public ResponseEntity<ResponseMessage> updateCard(@PathVariable Long updateCardId, @RequestBody Map<String, Object> map) {
+        Card updateCard = todoService.updateCard(updateCardId,map);
+        if(updateCard == null){
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, updateCard), HttpStatus.NOT_FOUND);
         }
-        List<Card> cards = col.getCards();
-        Card card = cards.get((int) map.get("row") - 1);
-        card.update(map);
-        colRepository.save(col);
-        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_UPDATE, card), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_UPDATE, updateCard), HttpStatus.OK);
     }
 
-    @PostMapping("/api/cards/move")
-    public ResponseEntity<ResponseMessage> moveCard(@RequestBody Map<String, Object> map) {
+    @PostMapping("/api/cards/move/{cardId}")
+    public ResponseEntity<ResponseMessage> moveCard(@PathVariable Long cardId, @RequestBody Map<String, Object> map) {
         String originColName = map.get("originColName").toString();
         String destinationColName = map.get("destinationColName").toString();
         int originRow = Integer.parseInt(map.get("originRow").toString());
@@ -111,10 +110,9 @@ public class TodoController {
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_MOVE, movedCard), HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/cards")
-    public ResponseEntity<ResponseMessage> deleteCard(@RequestBody Map<String, Object> map) {
+    @DeleteMapping("/api/cards/{cardId}")
+    public ResponseEntity<ResponseMessage> deleteCard(@PathVariable Long cardId, @RequestBody Map<String, Object> map) {
         Card card = cardRepository.findById(Long.parseLong(map.get("id").toString())).orElse(null);
-        Long cardId = Long.parseLong(map.get("id").toString());
         Long colId = cardRepository.findColByCardId(cardId);
         Col col = colRepository.findById(colId).orElse(null);
         if (card.getRow() != col.getCards().size()) {
@@ -148,21 +146,21 @@ public class TodoController {
 
     @GetMapping("/api/columns/{columnName}")
     public ResponseEntity<ResponseMessage> showColumn(@PathVariable String columnName) {
-        columnName = columnName.replace("_"," ");
+        columnName = columnName.replace("_", " ");
         Col col = colRepository.findByColName(columnName).orElse(null);
         List<Card> cards = col.getCards();
         List<Card> newCards = new ArrayList<>();
 
         for (int i = 0; i < cards.size(); i++) {
             Card tempCard = cards.get(i);
-            if(!tempCard.getDeleted()){
+            if (!tempCard.getDeleted()) {
                 newCards.add(tempCard);
             }
         }
 
         for (int i = 0; i < newCards.size(); i++) {
             Card tempCard = cards.get(i);
-            tempCard.setRow(i+1);
+            tempCard.setRow(i + 1);
         }
 
         col.setCards(newCards);

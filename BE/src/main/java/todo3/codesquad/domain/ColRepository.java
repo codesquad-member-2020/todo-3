@@ -3,6 +3,7 @@ package todo3.codesquad.domain;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,8 @@ public interface ColRepository extends CrudRepository<Col, Long> {
 
     @Query("select col_name from col where col.id = :id")
     String findColNameByNotDeleted(@Param("id") Integer id);
+
+    @Query("select * from col where category_name = :categoryName")
+    Optional<Col> findByCategoryName(@Param("categoryName") String categoryName);
+
 }
