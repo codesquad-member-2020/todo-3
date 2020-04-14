@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A12A67724446875007CB600 /* AddCardModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A12A67524446875007CB600 /* AddCardModalViewController.swift */; };
+		6A12A67824446875007CB600 /* AddCardModalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A12A67624446875007CB600 /* AddCardModalViewController.xib */; };
 		6A21A9A0243F5913009B2983 /* TableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A21A99F243F5913009B2983 /* TableViewHeader.swift */; };
 		6A21A9A824402D12009B2983 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A21A9A724402D12009B2983 /* Utility.swift */; };
 		6A74866A243AEFB200D89B3D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A748669243AEFB200D89B3D /* AppDelegate.swift */; };
@@ -35,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6A12A67524446875007CB600 /* AddCardModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCardModalViewController.swift; sourceTree = "<group>"; };
+		6A12A67624446875007CB600 /* AddCardModalViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddCardModalViewController.xib; sourceTree = "<group>"; };
 		6A21A99F243F5913009B2983 /* TableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeader.swift; sourceTree = "<group>"; };
 		6A21A9A724402D12009B2983 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		6A748666243AEFB200D89B3D /* ToDoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +147,8 @@
 			children = (
 				6A74868E243B48BD00D89B3D /* ToDoManagerViewController.swift */,
 				6A74866D243AEFB200D89B3D /* MasterViewController.swift */,
+				6A12A67524446875007CB600 /* AddCardModalViewController.swift */,
+				6A12A67624446875007CB600 /* AddCardModalViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A12A67824446875007CB600 /* AddCardModalViewController.xib in Resources */,
 				6A748676243AEFB300D89B3D /* LaunchScreen.storyboard in Resources */,
 				6A748673243AEFB300D89B3D /* Assets.xcassets in Resources */,
 				6A748671243AEFB200D89B3D /* Main.storyboard in Resources */,
@@ -256,6 +263,7 @@
 				6A74866E243AEFB200D89B3D /* MasterViewController.swift in Sources */,
 				6A820546243F32C40057780D /* ToDoTableViewCell.swift in Sources */,
 				6A74866A243AEFB200D89B3D /* AppDelegate.swift in Sources */,
+				6A12A67724446875007CB600 /* AddCardModalViewController.swift in Sources */,
 				6A748699243B615C00D89B3D /* ToDoTableViewDataSource.swift in Sources */,
 				6A74866C243AEFB200D89B3D /* SceneDelegate.swift in Sources */,
 				6A820542243F0D9D0057780D /* ToDoCardInfo.swift in Sources */,

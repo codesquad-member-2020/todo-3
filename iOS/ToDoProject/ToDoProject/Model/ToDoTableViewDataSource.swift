@@ -11,12 +11,12 @@ import UIKit
 class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DataManager.totalToDoCardsCount() ?? 0
+        return DataManager.cardsDataCount() ?? 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "todoCell", for: indexPath) as! ToDoTableViewCell
-        let cardData = DataManager.totalToDoCards?.responseData[0].cardList[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.identifier, for: indexPath) as! ToDoTableViewCell
+        let cardData = DataManager.cardsData?.responseData.cards[indexPath.row]
         
         cell.titleLabel.text = cardData?.title
         cell.contentLabel.text = cardData?.contents

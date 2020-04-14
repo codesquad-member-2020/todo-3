@@ -79,14 +79,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YJq-we-Wq8">
-                                <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
+                                <rect key="frame" x="0.0" y="0.0" width="334" height="734"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="VVx-gL-V6t">
+                                    <rect key="frame" x="0.0" y="0.0" width="334" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="todoCell" id="eVF-zg-lIK" customClass="ToDoTableViewCell" customModule="ToDoProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="333.5" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="72" width="334" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eVF-zg-lIK" id="vg7-GW-meT">
-                                            <rect key="frame" x="0.0" y="0.0" width="333.5" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="334" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -105,7 +110,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S6V-3o-Brl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="853" y="958"/>
+            <point key="canvasLocation" x="852.51798561151077" y="957.55395683453241"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8ZU-5m-Rdg">

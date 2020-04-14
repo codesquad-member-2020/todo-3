@@ -10,12 +10,14 @@ import Foundation
 
 struct ToDoCardInfo: Codable {
     let responseMessage: String
-    let responseData: [ToDoCard]
+    let responseData: ToDoCard
 }
 
 struct ToDoCard: Codable {
+    let id: Int
     let colName: String
-    let cardList: [Card]
+    let deleted: Bool
+    let cards: [Card]
 }
 
 struct Card: Codable {
@@ -26,4 +28,11 @@ struct Card: Codable {
     let writer: String
     let deleted: Bool
     let writtenTime: String
+}
+
+struct AddCardForm: Codable{
+    let title: String
+    let contents: String
+    let row: Int
+    let writer: String
 }

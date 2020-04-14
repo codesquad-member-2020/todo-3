@@ -25,3 +25,9 @@ enum Column {
     static let DoneColumn = "Done"
 }
 
+enum ColumnURLName {
+    static let ToDo = "To_Do"
+    static let InProgress = "In_Progress"
+    static let Done = "Done"
+}
+
