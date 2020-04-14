@@ -12,6 +12,7 @@ import todo3.codesquad.message.ResponseMessage;
 import todo3.codesquad.message.SuccessMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import todo3.codesquad.security.JwtTokenDecode;
 import todo3.codesquad.security.JwtTokenProvider;
 import todo3.codesquad.service.TodoService;
 
@@ -43,6 +44,8 @@ public class TodoController {
     @PostMapping("/api/cards")
     public ResponseEntity<ResponseMessage> createCard2(@RequestBody Map<String, Object> requestBody) {
         Card newCard = todoService.createCard(requestBody);
+        JwtTokenDecode jwtTokenDecode = new JwtTokenDecode();
+        String writer = jwtTokenDecode.getLoginUser("userId");
         if(newCard == null){
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);
         }
