@@ -12,6 +12,7 @@ class TableViewHeader: UITableViewHeaderFooterView {
     
     let titleLabel = UILabel(frame: .zero)
     let numberLabel = UILabel(frame: .zero)
+    let addButton = UIButton(frame: .zero)
     private let alphaValue = CGFloat(0.8)
     
     override init(reuseIdentifier: String?) {
@@ -45,14 +46,14 @@ class TableViewHeader: UITableViewHeaderFooterView {
         cardsNumberLabel.clipsToBounds = true
         cardsNumberLabel.text = "hi"
         cardsNumberLabel.backgroundColor = .white
-        cardsNumberLabel.layer.cornerRadius = 10
+        cardsNumberLabel.layer.cornerRadius = 17
         cardsNumberLabel.textColor = UIColor(named: KeyColorName.violetsAreBlue)
         customBackgroundView.addSubview(cardsNumberLabel)
         
-        cardsNumberLabel.topAnchor.constraint(equalTo: customBackgroundView.topAnchor,constant: 5).isActive = true
-        cardsNumberLabel.bottomAnchor.constraint(equalTo: customBackgroundView.bottomAnchor,constant: -5).isActive = true
+        cardsNumberLabel.topAnchor.constraint(equalTo: customBackgroundView.topAnchor,constant: 8).isActive = true
+        cardsNumberLabel.bottomAnchor.constraint(equalTo: customBackgroundView.bottomAnchor,constant: -8).isActive = true
         cardsNumberLabel.leadingAnchor.constraint(equalTo: customBackgroundView.leadingAnchor,constant: 5).isActive = true
-        cardsNumberLabel.trailingAnchor.constraint(equalTo: customBackgroundView.leadingAnchor,constant: 20).isActive = true
+        cardsNumberLabel.trailingAnchor.constraint(equalTo: customBackgroundView.leadingAnchor,constant: 40).isActive = true
         customBackgroundView.bringSubviewToFront(cardsNumberLabel)
                 
         // ColumnTitleLabel
@@ -68,7 +69,8 @@ class TableViewHeader: UITableViewHeaderFooterView {
         columnTitleLabel.trailingAnchor.constraint(equalTo: customBackgroundView.trailingAnchor,constant: -25).isActive = true
         
         // addCardButoon
-        let addCardButton = UIButton(frame: .zero)
+        var addCardButton = UIButton(frame: .zero)
+        addCardButton = self.addButton
         addCardButton.translatesAutoresizingMaskIntoConstraints = false
         addCardButton.tintColor = .white
         addCardButton.setImage(UIImage(systemName: SystemImageName.plus), for: .normal)
