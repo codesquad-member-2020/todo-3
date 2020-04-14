@@ -1,5 +1,5 @@
 INSERT INTO col (col_name, deleted)
-VALUES ("To do", false);
+VALUES ("To Do", false);
 INSERT INTO col (col_name, deleted)
 VALUES ("In Progress", false);
 INSERT INTO col (col_name, deleted)

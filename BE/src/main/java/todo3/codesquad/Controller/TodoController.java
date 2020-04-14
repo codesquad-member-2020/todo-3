@@ -38,7 +38,7 @@ public class TodoController {
     CardRepository cardRepository;
 
     @PostMapping("/api/requestToken")
-    public ResponseEntity<ResponseMessage> userLogin(@RequestBody Map<String,Object> map) {
+    public ResponseEntity<ResponseMessage> userLogin(@RequestBody Map<String, Object> map) {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
         String userId = map.get("userId").toString();
         User defaultUser = userRepository.findDefaultUser();
@@ -144,5 +144,28 @@ public class TodoController {
             resultResponse.add(response);
         }
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_SHOW, resultResponse), HttpStatus.OK);
+    }
+
+    @GetMapping("/api/columns/{columnName}")
+    public ResponseEntity<ResponseMessage> showColumn(@PathVariable String columnName) {
+        columnName = columnName.replace("_"," ");
+        Col col = colRepository.findByColName(columnName).orElse(null);
+        List<Card> cards = col.getCards();
+        List<Card> newCards = new ArrayList<>();
+
+        for (int i = 0; i < cards.size(); i++) {
+            Card tempCard = cards.get(i);
+            if(!tempCard.getDeleted()){
+                newCards.add(tempCard);
+            }
+        }
+
+        for (int i = 0; i < newCards.size(); i++) {
+            Card tempCard = cards.get(i);
+            tempCard.setRow(i+1);
+        }
+
+        col.setCards(newCards);
+        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_COL, col), HttpStatus.OK);
     }
 }

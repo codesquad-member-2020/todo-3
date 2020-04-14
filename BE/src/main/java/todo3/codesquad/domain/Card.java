@@ -54,4 +54,8 @@ public class Card {
     public void delete(){
         this.deleted = true;
     }
+
+    public boolean getDeleted() {
+        return this.deleted;
+    }
 }

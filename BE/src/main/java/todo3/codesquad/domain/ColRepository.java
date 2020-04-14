@@ -12,8 +12,6 @@ public interface ColRepository extends CrudRepository<Col, Long> {
     @Query("SELECT * FROM col WHERE col_name = :colName")
     Optional<Col> findByColName(@Param("colName") String colName);
 
-//    @Query("SELECT * FROM col LEFT JOIN card ON col.id = card.col WHERE col.deleted = false and card.deleted = false")
-//    @Query("select * from col outter join card on col.id = card.col where col.deleted = false and card.deleted = false")
     @Query("select id from col where col.deleted = false")
     List<Integer> findColIdByNotDeleted();
 
