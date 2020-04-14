@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class TempClass {
+public class TodoService {
 
     private final ColRepository colRepository;
 
-    public TempClass(ColRepository colRepository) {
+    public TodoService(ColRepository colRepository) {
         this.colRepository = colRepository;
     }
 
