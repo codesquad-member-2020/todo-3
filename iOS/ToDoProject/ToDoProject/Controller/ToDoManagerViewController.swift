@@ -34,6 +34,7 @@ class ToDoManagerViewController: UIViewController {
         dataManager.requestData(of: self.column)
         setupNotification()
         columnTitleLabel.text = headerTitle
+        self.ToDoTableView.delegate = self
     }
     
     deinit {
@@ -62,11 +63,11 @@ class ToDoManagerViewController: UIViewController {
         if addedCardColumn == self.switchName(column: self.column) {
             DispatchQueue.main.async {
                 print(#function)
-            self.dataSource.dataManager = self.dataManager
+                self.dataSource.dataManager = self.dataManager
                 self.dataSource.dataManager.cardsData?.responseData.cards.append(addedCardInfo)
-            guard let cardsCount = self.dataManager.cardsDataCount() else { return }
-            self.cardsNumberLabel.text = "\(cardsCount)"
-            self.ToDoTableView.reloadData()
+                guard let cardsCount = self.dataManager.cardsDataCount() else { return }
+                self.cardsNumberLabel.text = "\(cardsCount)"
+                self.ToDoTableView.reloadData()
             }
         }
     }
@@ -92,3 +93,29 @@ class ToDoManagerViewController: UIViewController {
         }
     }
 }
+
+extension ToDoManagerViewController: UITableViewDelegate{
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let item = tableView.cellForRow(at: indexPath)
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let moveToDone = UIAction(title: "move to done") { _ in }
+            let edit = UIAction(title: "edit...") { _ in}
+            let delete = UIAction(title: "delete", attributes: .destructive) { _ in
+                self.deleteCard(indexPath: indexPath, tableView: tableView)
+            }
+            let menu = UIMenu(title: "", children: [moveToDone, edit, delete])
+            return menu
+        }
+        return configuration
+    }
+    
+    private func deleteCard(indexPath: IndexPath, tableView: UITableView){
+        let cardToDelete = self.dataManager.cardsData?.responseData.cards[indexPath.row]
+         guard let cardIdToDelete = cardToDelete?.id else { return }
+        self.dataManager.cardsData?.responseData.cards.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .fade)
+         let cardId = DeleteCardForm(id: cardIdToDelete)
+        self.dataManager.requestDeleteCard(cardId: cardId)
+    }
+}
+
