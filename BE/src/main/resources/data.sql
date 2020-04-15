@@ -1,9 +1,9 @@
-INSERT INTO col (col_name, deleted)
-VALUES ("To Do", false);
-INSERT INTO col (col_name, deleted)
-VALUES ("In Progress", false);
-INSERT INTO col (col_name, deleted)
-VALUES ("Done", false);
+INSERT INTO col (col_name, category_name, deleted)
+VALUES ("To Do", "todo", false);
+INSERT INTO col (col_name, category_name, deleted)
+VALUES ("In Progress", "doing", false);
+INSERT INTO col (col_name, category_name, deleted)
+VALUES ("Done", "done", false);
 
 INSERT INTO card (row, title, contents, writer, deleted, written_time, col, col_key)
 VALUES (1, "title1", "contents1", "todo3people", false, now(), 1, 0);
