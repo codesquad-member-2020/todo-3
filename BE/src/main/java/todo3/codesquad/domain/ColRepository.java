@@ -10,15 +10,8 @@ import java.util.Optional;
 
 public interface ColRepository extends CrudRepository<Col, Long> {
 
-
-    @Query("select id from col where col.deleted = false")
-    List<Integer> findColIdByNotDeleted();
-
-    @Query("select col_name from col where col.id = :id")
-    String findColNameByNotDeleted(@Param("id") Integer id);
-
-
-//---------------------------------------------------------------------------//
+    @Query("select * from col where col.deleted = false")
+    Optional<List<Col>> findColByNotDeleted();
 
     @Query("SELECT * FROM col WHERE col_name = :colName")
     Optional<Col> findColByColName(@Param("colName") String colName);
@@ -35,5 +28,8 @@ public interface ColRepository extends CrudRepository<Col, Long> {
     @Modifying
     @Query("update card set deleted = true, row = 0 where id = :cardId")
     boolean deleteCardByCardId(@Param("cardId") Long cardId);
+
+    @Query("select * from card where deleted = 0 and card.col = :colId")
+    Optional<List<Card>> findNotDeletedCardsByColId(@Param("colId") Long colId);
 
 }

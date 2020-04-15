@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import todo3.codesquad.security.JwtTokenProvider;
 import todo3.codesquad.service.TodoService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,12 +25,10 @@ public class TodoController {
     private static final Logger log = LoggerFactory.getLogger(TodoController.class);
     private TodoService todoService;
     private UserRepository userRepository;
-    private ColRepository colRepository;
 
-    public TodoController(TodoService todoService, UserRepository userRepository, ColRepository colRepository) {
+    public TodoController(TodoService todoService, UserRepository userRepository) {
         this.todoService = todoService;
         this.userRepository = userRepository;
-        this.colRepository = colRepository;
     }
 
     @PostMapping("/api/requestToken")
@@ -72,51 +71,26 @@ public class TodoController {
     public ResponseEntity<ResponseMessage> deleteCard(@PathVariable Long cardId) {
         Card deletedCard = todoService.deleteCard(cardId);
         if (deletedCard == null) {
-            return new ResponseEntity<>(new ResponseMessage(FailedMessage.NULL_DATA_MESSAGE, null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.NULL_DATA_MESSAGE, deletedCard), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_DELETE, deletedCard), HttpStatus.OK);
     }
 
-//    @GetMapping("/api/cards/show")
-//    public ResponseEntity<ResponseMessage> showCards() {
-//        List<Response> resultResponse = new ArrayList<>();
-//        List<Integer> colNames = colRepository.findColIdByNotDeleted();
-//        for (int i = 0; i < colNames.size(); i++) {
-//            Integer idx = colNames.get(i);
-//            String columnName = colRepository.findColNameByNotDeleted(idx);
-//            List<Card> tempCards = cardRepository.findAllByColumnCard(idx);
-//            Response response = new Response(columnName, tempCards);
-//            resultResponse.add(response);
-//        }
-//        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_SHOW, resultResponse), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/api/columns/{columnName}")
-//    public ResponseEntity<ResponseMessage> showColumn(@PathVariable String columnName) {
-//        columnName = columnName.replace("_", " ");
-//        Col col = colRepository.findByColName(columnName).orElse(null);
-//        List<Card> cards = col.getCards();
-//        List<Card> newCards = new ArrayList<>();
-//
-//        for (int i = 0; i < cards.size(); i++) {
-//            Card tempCard = cards.get(i);
-//            if (!tempCard.getDeleted()) {
-//                newCards.add(tempCard);
-//            }
-//        }
-//
-//        for (int i = 0; i < newCards.size(); i++) {
-//            Card tempCard = cards.get(i);
-//            tempCard.setRow(i + 1);
-//        }
-//
-//        col.setCards(newCards);
-//        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_COL, col), HttpStatus.OK);
-//    }
+    @GetMapping("/api/cards/show")
+    public ResponseEntity<ResponseMessage> showCards() {
+        List<Col> columns = todoService.showColumns();
+        if (columns == null){
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.NULL_DATA_MESSAGE, columns), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_SHOW, columns), HttpStatus.OK);
+    }
 
-    @DeleteMapping ("/test/{id}")
-    public ResponseEntity<ResponseMessage> test(@PathVariable Long id) {
-        Card tempCard = todoService.deleteCard(id);
-        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_COL, tempCard), HttpStatus.OK);
+    @GetMapping("/api/columns/{columnName}")
+    public ResponseEntity<ResponseMessage> showColumn(@PathVariable String columnName) {
+        Col column = todoService.showColumn(columnName);
+        if (column == null){
+            return new ResponseEntity<>(new ResponseMessage(FailedMessage.NULL_DATA_MESSAGE, column), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_COL, column), HttpStatus.OK);
     }
 }

@@ -6,7 +6,7 @@ import todo3.codesquad.domain.Card;
 import todo3.codesquad.domain.Col;
 import todo3.codesquad.domain.ColRepository;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class TodoService {
         }
         List<Card> cards = col.getCards();
         Card card = new Card(requestBody);
-        cards.add(0, card);
+        cards.add(card);
         for (int i = 0; i < cards.size(); i++) {
             Card tempCard = cards.get(i);
             tempCard.setRow(i + 1);
@@ -112,6 +112,33 @@ public class TodoService {
             }
             colRepository.save(col);
             return colRepository.findCardByCardId(deleteCardId).orElse(null);
+        }
+        return null;
+    }
+
+    public List<Col> showColumns() {
+        List<Col> columns = colRepository.findColByNotDeleted().orElse(null);
+        List<Col> newColumns = new ArrayList<>();
+        for (int i = 0; i < columns.size(); i++) {
+            Col tempCol = columns.get(i);
+            Long colId = tempCol.getId();
+            List<Card> tempCards = colRepository.findNotDeletedCardsByColId(colId).orElse(null);
+            if (tempCol.isDeleted()) {
+                continue;
+            }
+            tempCol.setCards(tempCards);
+            newColumns.add(tempCol);
+        }
+        return newColumns;
+    }
+
+    public Col showColumn(String columnName) {
+        columnName = columnName.replace("_", " ");
+        List<Col> columns = showColumns();
+        for (int i = 0; i < columns.size(); i++) {
+            if(columns.get(i).getColName().equals(columnName)){
+                return columns.get(i);
+            }
         }
         return null;
     }

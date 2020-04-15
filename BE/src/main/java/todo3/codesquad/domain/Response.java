@@ -3,7 +3,6 @@ package todo3.codesquad.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import todo3.codesquad.domain.Card;
 
 import java.util.List;
 
