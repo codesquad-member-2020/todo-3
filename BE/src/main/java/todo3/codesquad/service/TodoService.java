@@ -2,10 +2,9 @@ package todo3.codesquad.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import todo3.codesquad.domain.Card;
-import todo3.codesquad.domain.Col;
-import todo3.codesquad.domain.ColRepository;
+import todo3.codesquad.domain.*;
 import todo3.codesquad.security.JwtTokenDecode;
+import todo3.codesquad.security.JwtTokenProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +15,24 @@ import java.util.Map;
 public class TodoService {
 
     private final ColRepository colRepository;
+    private final UserRepository userRepository;
 
-    public TodoService(ColRepository colRepository) {
+    public TodoService(ColRepository colRepository, UserRepository userRepository) {
         this.colRepository = colRepository;
+        this.userRepository = userRepository;
+    }
+
+    public String issueJwtToken(Map<String, Object> requestBody) {
+        if (requestBody.get("userId") == null) {
+            return null;
+        }
+        String userId = requestBody.get("userId").toString();
+        User defaultUser = userRepository.findDefaultUser();
+        User user = userRepository.findByUserId(userId).orElse(defaultUser);
+
+        String token = getJwtToken(user);
+
+        return getJwtToken(user);
     }
 
     public Card createCard(Map<String, Object> requestBody) {
@@ -148,5 +162,10 @@ public class TodoService {
     private String getWriterInJwtToken() {
         JwtTokenDecode jwtTokenDecode = new JwtTokenDecode();
         return jwtTokenDecode.getLoginUser("userId");
+    }
+
+    private String getJwtToken(User user) {
+        JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
+        return jwtTokenProvider.JwtTokenMaker(user);
     }
 }
