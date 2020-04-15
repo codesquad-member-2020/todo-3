@@ -32,13 +32,12 @@ public class TodoController {
 
         if (token == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, token), HttpStatus.NOT_FOUND);
-
         }
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_LOGIN, token), HttpStatus.OK);
     }
 
     @PostMapping("/api/cards")
-    public ResponseEntity<ResponseMessage> createCard2(@RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<ResponseMessage> createCard(@RequestBody Map<String, Object> requestBody) {
         Card newCard = todoService.createCard(requestBody);
         if (newCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);

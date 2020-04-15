@@ -36,10 +36,10 @@ public class JwtTokenDecode {
 
     public String getLoginUser(String key) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String jwt = request.getHeader("Authorization");
+        String jwt = request.getHeader("Authorization").replace("Bearer ", "");
         Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary("todo"))
                 .parseClaimsJws(jwt).getBody();
-        return (String) claims.get("userName");
+        return (String) claims.get(key);
 
     }
 }

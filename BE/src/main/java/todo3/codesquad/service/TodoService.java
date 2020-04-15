@@ -32,7 +32,7 @@ public class TodoService {
 
         String token = getJwtToken(user);
 
-        return getJwtToken(user);
+        return token;
     }
 
     public Card createCard(Map<String, Object> requestBody) {
@@ -161,7 +161,7 @@ public class TodoService {
 
     private String getWriterInJwtToken() {
         JwtTokenDecode jwtTokenDecode = new JwtTokenDecode();
-        return jwtTokenDecode.getLoginUser("userId");
+        return jwtTokenDecode.getLoginUser("userName");
     }
 
     private String getJwtToken(User user) {
