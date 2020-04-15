@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import todo3.codesquad.domain.Card;
 import todo3.codesquad.domain.Col;
 import todo3.codesquad.domain.ColRepository;
+import todo3.codesquad.security.JwtTokenDecode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,9 @@ public class TodoService {
         if (col.getCards() == null) {
             return null;
         }
+        String writer = getWriterInJwtToken();
         List<Card> cards = col.getCards();
-        Card card = new Card(requestBody);
+        Card card = new Card(requestBody, writer);
         cards.add(card);
         for (int i = 0; i < cards.size(); i++) {
             Card tempCard = cards.get(i);
@@ -136,11 +138,15 @@ public class TodoService {
         columnName = columnName.replace("_", " ");
         List<Col> columns = showColumns();
         for (int i = 0; i < columns.size(); i++) {
-            if(columns.get(i).getColName().equals(columnName)){
+            if (columns.get(i).getColName().equals(columnName)) {
                 return columns.get(i);
             }
         }
         return null;
     }
 
+    private String getWriterInJwtToken() {
+        JwtTokenDecode jwtTokenDecode = new JwtTokenDecode();
+        return jwtTokenDecode.getLoginUser("userId");
+    }
 }

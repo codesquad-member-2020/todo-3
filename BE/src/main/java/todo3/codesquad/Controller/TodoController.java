@@ -1,18 +1,17 @@
 package todo3.codesquad.Controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import todo3.codesquad.domain.*;
+import todo3.codesquad.domain.Card;
+import todo3.codesquad.domain.Col;
+import todo3.codesquad.domain.User;
+import todo3.codesquad.domain.UserRepository;
 import todo3.codesquad.message.FailedMessage;
 import todo3.codesquad.message.ResponseMessage;
 import todo3.codesquad.message.SuccessMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import todo3.codesquad.security.JwtTokenDecode;
 import todo3.codesquad.security.JwtTokenProvider;
 import todo3.codesquad.service.TodoService;
 
@@ -44,8 +43,6 @@ public class TodoController {
     @PostMapping("/api/cards")
     public ResponseEntity<ResponseMessage> createCard2(@RequestBody Map<String, Object> requestBody) {
         Card newCard = todoService.createCard(requestBody);
-        JwtTokenDecode jwtTokenDecode = new JwtTokenDecode();
-        String writer = jwtTokenDecode.getLoginUser("userId");
         if(newCard == null){
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);
         }
