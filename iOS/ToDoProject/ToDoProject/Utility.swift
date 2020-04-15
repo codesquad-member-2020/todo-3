@@ -35,4 +35,5 @@ enum ColumnURLName {
 enum NotificationUserInfoKey {
     static let cardCount = "cardCount"
     static let addedCardInfo = "addedCardInfo"
+    static let addedCardColumn = "addedCardColumn"
 }

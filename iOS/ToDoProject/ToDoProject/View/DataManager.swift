@@ -15,6 +15,7 @@ class DataManager {
     var cardsData: ToDoCardInfo?
     private var cardCount: String?
     private var responseForAddCard: Card?
+    private var addedCardColumn: String?
     
     func cardsDataCount() -> Int?{
         self.cardsData?.responseData.cards.count ?? 0
@@ -55,7 +56,7 @@ class DataManager {
             }
         }.resume()
     }
-
+    
     
     func requestAddCard(card: AddCardForm) {
         let encoder = JSONEncoder()
@@ -81,21 +82,16 @@ class DataManager {
                     print("statusCode should be 200, but is \(httpStatus.statusCode)")
                     print("response = \(response)")
                 }
-                    print("statusCode is 200, Success")
-                    let decoder = JSONDecoder()
-                    do{
-                        let decodedData = try decoder.decode(AddCardResponse.self, from: data)
-                        self.responseForAddCard = decodedData.responseData
-//                        self.cardCount = " \(decodedData.responseData.row)"
-                        self.sendCompletionNotification()
-                    } catch {
-                        self.responseForAddCard = nil
-                    }
-                    
-                
-                
-//                let responseString = String(data: data, encoding: .utf8)
-//                print("responseString = \(responseString)")
+                print("statusCode is 200, Success")
+                let decoder = JSONDecoder()
+                do{
+                    let decodedData = try decoder.decode(AddCardResponse.self, from: data)
+                    self.responseForAddCard = decodedData.responseData
+                    self.addedCardColumn = card.colName
+                    self.sendCompletionNotification()
+                } catch {
+                    self.responseForAddCard = nil
+                }
             }
             task.resume()
         }
@@ -105,7 +101,7 @@ class DataManager {
         NotificationCenter.default.post(name: DataManager.ToDoCardsDecodedNotification, object: nil,userInfo: [NotificationUserInfoKey.cardCount: cardCount!])
     }
     
-        private func sendCompletionNotification() {
-            NotificationCenter.default.post(name: DataManager.AddCardCompletedNotification, object: nil, userInfo: [NotificationUserInfoKey.addedCardInfo: responseForAddCard!])
-        }
+    private func sendCompletionNotification() {
+        NotificationCenter.default.post(name: DataManager.AddCardCompletedNotification, object: nil, userInfo: [NotificationUserInfoKey.addedCardInfo: responseForAddCard!, NotificationUserInfoKey.addedCardColumn: addedCardColumn!])
+    }
 }

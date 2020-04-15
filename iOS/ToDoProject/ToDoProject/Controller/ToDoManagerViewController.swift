@@ -58,13 +58,16 @@ class ToDoManagerViewController: UIViewController {
     
     @objc private func updateTableView(notification: Notification){
         guard let addedCardInfo = notification.userInfo?[NotificationUserInfoKey.addedCardInfo] as? Card else { return }
-        DispatchQueue.main.async {
-            print(#function)
-        self.dataSource.dataManager = self.dataManager
-            self.dataSource.dataManager.cardsData?.responseData.cards.append(addedCardInfo)
-        guard let cardsCount = self.dataManager.cardsDataCount() else { return }
-        self.cardsNumberLabel.text = "\(cardsCount)"
-        self.ToDoTableView.reloadData()
+        guard let addedCardColumn = notification.userInfo?[NotificationUserInfoKey.addedCardColumn] as? String else { return }
+        if addedCardColumn == self.switchName(column: self.column) {
+            DispatchQueue.main.async {
+                print(#function)
+            self.dataSource.dataManager = self.dataManager
+                self.dataSource.dataManager.cardsData?.responseData.cards.append(addedCardInfo)
+            guard let cardsCount = self.dataManager.cardsDataCount() else { return }
+            self.cardsNumberLabel.text = "\(cardsCount)"
+            self.ToDoTableView.reloadData()
+            }
         }
     }
     
