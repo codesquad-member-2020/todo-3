@@ -25,3 +25,15 @@ enum Column {
     static let DoneColumn = "Done"
 }
 
+enum ColumnURLName {
+    static let ToDo = "To_Do"
+    static let InProgress = "In_Progress"
+    static let Done = "Done"
+    
+}
+
+enum NotificationUserInfoKey {
+    static let cardCount = "cardCount"
+    static let addedCardInfo = "addedCardInfo"
+    static let addedCardColumn = "addedCardColumn"
+}

@@ -16,12 +16,9 @@ class MasterViewController: UIViewController {
     private var toDoListVC: ToDoManagerViewController!
     private var inProgressListVC: ToDoManagerViewController!
     private var doneListVC: ToDoManagerViewController!
-    private var totalCardsInfo: ToDoCardInfo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        DataManager.requestData()
-        self.totalCardsInfo = DataManager.totalToDoCards
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -29,16 +26,20 @@ class MasterViewController: UIViewController {
             let toDoVC = segue.destination as! ToDoManagerViewController
             toDoVC.headerTitle = Column.ToDoColumn
             toDoListVC = toDoVC
+            toDoVC.column = ColumnURLName.ToDo
         }
         if segue.identifier == Column.InProgressColumn{
             let inProgressVC = segue.destination as! ToDoManagerViewController
             inProgressVC.headerTitle = Column.InProgressColumn
             inProgressListVC = inProgressVC
+            inProgressVC.column = ColumnURLName.InProgress
+
         }
         if segue.identifier == Column.DoneColumn{
             let doneVC = segue.destination as! ToDoManagerViewController
             doneVC.headerTitle = Column.DoneColumn
             doneListVC = doneVC
+            doneVC.column = ColumnURLName.Done
         }
     }
 }
