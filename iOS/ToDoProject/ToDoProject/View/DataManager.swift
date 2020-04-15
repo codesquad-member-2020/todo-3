@@ -40,24 +40,6 @@ class DataManager {
         }.resume()
     }
     
-    func updateData(of column: String) {
-        let toDoCardsURL =
-        "http://15.164.78.121:8080/api/columns/\(column)"
-        guard let url = URL(string: toDoCardsURL) else { return }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard error == nil else { return }
-            guard let data = data else { return }
-            let decoder = JSONDecoder()
-            do{
-                let decodedData = try decoder.decode(ToDoCardInfo.self, from: data)
-                self.cardsData = decodedData
-            } catch {
-                self.cardsData = nil
-            }
-        }.resume()
-    }
-    
-    
     func requestAddCard(card: AddCardForm) {
         let encoder = JSONEncoder()
         
