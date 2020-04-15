@@ -84,9 +84,9 @@ class ToDoManagerViewController: UIViewController {
     
     func switchName(column: String) -> String {
         switch column {
-        case ColumnURLName.ToDo: return Column.ToDoColumn
-        case ColumnURLName.InProgress: return Column.InProgressColumn
-        case ColumnURLName.Done: return Column.DoneColumn
+        case ColumnURLName.toDo: return Column.toDoColumn
+        case ColumnURLName.inProgress: return Column.inProgressColumn
+        case ColumnURLName.done: return Column.doneColumn
         default:
             return ""
         }
