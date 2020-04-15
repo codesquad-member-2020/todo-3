@@ -20,15 +20,15 @@ enum SystemImageName{
 }
 
 enum Column {
-    static let ToDoColumn = "To Do"
-    static let InProgressColumn = "In Progress"
-    static let DoneColumn = "Done"
+    static let toDoColumn = "To Do"
+    static let inProgressColumn = "In Progress"
+    static let doneColumn = "Done"
 }
 
 enum ColumnURLName {
-    static let ToDo = "To_Do"
-    static let InProgress = "In_Progress"
-    static let Done = "Done"
+    static let toDo = "To_Do"
+    static let inProgress = "In_Progress"
+    static let done = "Done"
     
 }
 
@@ -36,4 +36,10 @@ enum NotificationUserInfoKey {
     static let cardCount = "cardCount"
     static let addedCardInfo = "addedCardInfo"
     static let addedCardColumn = "addedCardColumn"
+}
+
+enum RequestMethod {
+    static let post = "Post"
+    static let put = "Put" // edit card
+    static let delete = "Delete" // delete card
 }

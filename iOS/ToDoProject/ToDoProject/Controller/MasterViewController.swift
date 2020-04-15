@@ -22,24 +22,24 @@ class MasterViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == Column.ToDoColumn{
+        if segue.identifier == Column.toDoColumn{
             let toDoVC = segue.destination as! ToDoManagerViewController
-            toDoVC.headerTitle = Column.ToDoColumn
+            toDoVC.headerTitle = Column.toDoColumn
             toDoListVC = toDoVC
-            toDoVC.column = ColumnURLName.ToDo
+            toDoVC.column = ColumnURLName.toDo
         }
-        if segue.identifier == Column.InProgressColumn{
+        if segue.identifier == Column.inProgressColumn{
             let inProgressVC = segue.destination as! ToDoManagerViewController
-            inProgressVC.headerTitle = Column.InProgressColumn
+            inProgressVC.headerTitle = Column.inProgressColumn
             inProgressListVC = inProgressVC
-            inProgressVC.column = ColumnURLName.InProgress
+            inProgressVC.column = ColumnURLName.inProgress
 
         }
-        if segue.identifier == Column.DoneColumn{
+        if segue.identifier == Column.doneColumn{
             let doneVC = segue.destination as! ToDoManagerViewController
-            doneVC.headerTitle = Column.DoneColumn
+            doneVC.headerTitle = Column.doneColumn
             doneListVC = doneVC
-            doneVC.column = ColumnURLName.Done
+            doneVC.column = ColumnURLName.done
         }
     }
 }

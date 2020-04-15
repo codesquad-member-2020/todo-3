@@ -38,7 +38,11 @@ struct AddCardForm: Codable{
     let writer: String
 }
 
-struct AddCardResponse: Codable {
+struct ResponseDataForm: Codable {
     let responseMessage: String
     let responseData: Card
+}
+
+struct DeleteCardForm: Codable {
+    let id: Int
 }
