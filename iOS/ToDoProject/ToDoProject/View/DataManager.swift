@@ -11,13 +11,16 @@ import Foundation
 class DataManager {
     
     static let ToDoCardsDecodedNotification = NSNotification.Name("ToDoCardsDecodedNotification")
-    static var cardsData: ToDoCardInfo?
-    static var cardCount: String?
-    static func cardsDataCount() -> Int?{
-        DataManager.cardsData?.responseData.cards.count ?? 0
+    static let AddCardCompletedNotification = NSNotification.Name("AddCardCompletedNotification")
+    var cardsData: ToDoCardInfo?
+    private var cardCount: String?
+    private var responseForAddCard: Card?
+    
+    func cardsDataCount() -> Int?{
+        self.cardsData?.responseData.cards.count ?? 0
     }
     
-    static func requestData(of column: String) {
+    func requestData(of column: String) {
         let toDoCardsURL =
         "http://15.164.78.121:8080/api/columns/\(column)"
         guard let url = URL(string: toDoCardsURL) else { return }
@@ -36,9 +39,27 @@ class DataManager {
         }.resume()
     }
     
-        static func requestAddCard(card: AddCardForm) {
-        let encoder = JSONEncoder()
+    func updateData(of column: String) {
+        let toDoCardsURL =
+        "http://15.164.78.121:8080/api/columns/\(column)"
+        guard let url = URL(string: toDoCardsURL) else { return }
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard error == nil else { return }
+            guard let data = data else { return }
+            let decoder = JSONDecoder()
+            do{
+                let decodedData = try decoder.decode(ToDoCardInfo.self, from: data)
+                self.cardsData = decodedData
+            } catch {
+                self.cardsData = nil
+            }
+        }.resume()
+    }
 
+    
+    func requestAddCard(card: AddCardForm) {
+        let encoder = JSONEncoder()
+        
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         
         let jsonData = try? encoder.encode(card)
@@ -52,27 +73,39 @@ class DataManager {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
             let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
-            
-                   guard let data = data, error == nil else {
-                       print("error=\(error)")
-                       return
-                   }
-                    
-                   if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                       print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                       print("response = \(response)")
-                   } else {
-                    print("statusCode is 200, Success")
+                guard let data = data, error == nil else {
+                    print("error=\(error)")
+                    return
                 }
+                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                    print("response = \(response)")
+                }
+                    print("statusCode is 200, Success")
+                    let decoder = JSONDecoder()
+                    do{
+                        let decodedData = try decoder.decode(AddCardResponse.self, from: data)
+                        self.responseForAddCard = decodedData.responseData
+//                        self.cardCount = " \(decodedData.responseData.row)"
+                        self.sendCompletionNotification()
+                    } catch {
+                        self.responseForAddCard = nil
+                    }
                     
-                   let responseString = String(data: data, encoding: .utf8)
-                   print("responseString = \(responseString)")
+                
+                
+//                let responseString = String(data: data, encoding: .utf8)
+//                print("responseString = \(responseString)")
             }
             task.resume()
         }
     }
-
-    private static func sendNotification() {
-        NotificationCenter.default.post(name: DataManager.ToDoCardsDecodedNotification, object: nil,userInfo: ["cardCount": cardCount!])
+    
+    private func sendNotification() {
+        NotificationCenter.default.post(name: DataManager.ToDoCardsDecodedNotification, object: nil,userInfo: [NotificationUserInfoKey.cardCount: cardCount!])
     }
+    
+        private func sendCompletionNotification() {
+            NotificationCenter.default.post(name: DataManager.AddCardCompletedNotification, object: nil, userInfo: [NotificationUserInfoKey.addedCardInfo: responseForAddCard!])
+        }
 }

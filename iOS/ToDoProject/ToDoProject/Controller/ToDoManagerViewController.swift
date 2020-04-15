@@ -8,60 +8,84 @@
 
 import UIKit
 
-class ToDoManagerViewController: UITableViewController {
+class ToDoManagerViewController: UIViewController {
     
+    @IBOutlet weak var headerBackgroundView: UIView!
+    @IBOutlet weak var cardsNumberLabel: UILabel!
+    @IBOutlet weak var columnTitleLabel: UILabel!
+    @IBOutlet weak var numberBackgroundView: UILabel!
+    @IBOutlet weak var ToDoTableView: UITableView!
     var column = ""
     var headerTitle = ""
     var numberOfCard = ""
     private var cardList = [Card]()
     private let tableViewHeaderHeight = CGFloat(50)
-    private let dataSource = ToDoTableViewDataSource()
+    let dataSource = ToDoTableViewDataSource()
+    let dataManager = DataManager()
     private let nib = UINib(nibName: "ToDoTableViewCell", bundle: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.dataSource = dataSource
-        tableView.register(nib, forCellReuseIdentifier: "todoCell")
-        DataManager.requestData(of: self.column)
+        self.headerBackgroundView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        headerBackgroundView.layer.cornerRadius = 10
+        dataSource.dataManager = self.dataManager
+        self.ToDoTableView.dataSource = dataSource
+        ToDoTableView.register(nib, forCellReuseIdentifier: "todoCell")
+        dataManager.requestData(of: self.column)
         setupNotification()
+        columnTitleLabel.text = headerTitle
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: DataManager.ToDoCardsDecodedNotification, object: nil)
-    }
-    
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        let header = TableViewHeader()
-        header.titleLabel.text = headerTitle
-        header.numberLabel.text = numberOfCard
-        header.addButton.addTarget(self, action: #selector(showCardSheet), for: .touchUpInside)
-        return header
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.tableViewHeaderHeight
+        NotificationCenter.default.removeObserver(self, name: DataManager.AddCardCompletedNotification, object: nil)
     }
     
     private func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: DataManager.ToDoCardsDecodedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTableView), name: DataManager.AddCardCompletedNotification, object: nil)
     }
     
     @objc private func reloadTableView(notification: Notification) {
-        guard let cardCount = notification.userInfo?["cardCount"] as? String else { return }
-        numberOfCard = cardCount
+        guard let cardCount = notification.userInfo?[NotificationUserInfoKey.cardCount] as? String else { return }
+        self.numberOfCard = cardCount
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            guard let cardsCount = self.dataManager.cardsDataCount() else { return }
+            self.cardsNumberLabel.text = "\(cardsCount)"
+            self.ToDoTableView.reloadData()
         }
     }
     
-    @objc func showCardSheet(){
-        let vc = AddCardModalViewController()
-        vc.modalPresentationStyle = .automatic
-        vc.providesPresentationContextTransitionStyle = true
-        vc.definesPresentationContext = true
-        vc.modalPresentationStyle = UIModalPresentationStyle.automatic;
-        vc.view.backgroundColor = UIColor.init(white: 1, alpha: 1)
-        self.present(vc, animated: true, completion: nil)
+    @objc private func updateTableView(notification: Notification){
+        guard let addedCardInfo = notification.userInfo?[NotificationUserInfoKey.addedCardInfo] as? Card else { return }
+        DispatchQueue.main.async {
+            print(#function)
+        self.dataSource.dataManager = self.dataManager
+            self.dataSource.dataManager.cardsData?.responseData.cards.append(addedCardInfo)
+        guard let cardsCount = self.dataManager.cardsDataCount() else { return }
+        self.cardsNumberLabel.text = "\(cardsCount)"
+        self.ToDoTableView.reloadData()
+        }
+    }
+    
+    @IBAction func addCardButtonTapped(_ sender: Any) {
+        let cardSheet = AddCardModalViewController()
+        cardSheet.column = switchName(column: self.column)
+        cardSheet.modalPresentationStyle = .automatic
+        cardSheet.providesPresentationContextTransitionStyle = true
+        cardSheet.definesPresentationContext = true
+        cardSheet.modalPresentationStyle = UIModalPresentationStyle.automatic;
+        cardSheet.view.backgroundColor = UIColor.init(white: 1, alpha: 1)
+        self.present(cardSheet, animated: true, completion: nil)
+    }
+    
+    func switchName(column: String) -> String {
+        switch column {
+        case ColumnURLName.ToDo: return Column.ToDoColumn
+        case ColumnURLName.InProgress: return Column.InProgressColumn
+        case ColumnURLName.Done: return Column.DoneColumn
+        default:
+            return ""
+        }
     }
 }

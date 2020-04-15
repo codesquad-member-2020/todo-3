@@ -74,24 +74,75 @@
         <scene sceneID="or8-a7-jSa">
             <objects>
                 <viewController storyboardIdentifier="toDoListVC" id="gO2-aU-0ae" customClass="ToDoManagerViewController" customModule="ToDoProject" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="rTs-0Y-PNe" customClass="UITableView">
+                    <view key="view" contentMode="scaleToFill" id="rTs-0Y-PNe">
                         <rect key="frame" x="0.0" y="0.0" width="333.5" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BBu-oX-Hjs">
+                                <rect key="frame" x="0.0" y="0.0" width="333.5" height="60"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZqS-bE-3Gk">
+                                        <rect key="frame" x="5" y="14" width="32" height="32"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Zo-74-wSd">
+                                                <rect key="frame" x="7" y="5.5" width="19" height="21"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <color key="textColor" name="violetsAreBlue"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstItem="1Zo-74-wSd" firstAttribute="centerY" secondItem="ZqS-bE-3Gk" secondAttribute="centerY" id="Jos-Aj-Wxt"/>
+                                            <constraint firstItem="1Zo-74-wSd" firstAttribute="leading" secondItem="ZqS-bE-3Gk" secondAttribute="leading" constant="7" id="agp-nr-kkU"/>
+                                            <constraint firstAttribute="width" secondItem="ZqS-bE-3Gk" secondAttribute="height" multiplier="1:1" id="mLi-Pz-pxI"/>
+                                            <constraint firstAttribute="height" constant="32" id="xTj-wU-JPe"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ksu-1Y-ZIW">
+                                        <rect key="frame" x="297" y="19" width="21.5" height="22"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="plus" catalog="system">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="addCardButtonTapped:" destination="gO2-aU-0ae" eventType="touchUpInside" id="tHJ-1R-5rc"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gAz-nS-f6R">
+                                        <rect key="frame" x="48" y="19" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" name="violetsAreBlue"/>
+                                <constraints>
+                                    <constraint firstItem="ZqS-bE-3Gk" firstAttribute="leading" secondItem="BBu-oX-Hjs" secondAttribute="leading" constant="5" id="2te-MT-39S"/>
+                                    <constraint firstItem="ZqS-bE-3Gk" firstAttribute="centerY" secondItem="BBu-oX-Hjs" secondAttribute="centerY" id="FSO-oB-H2h"/>
+                                    <constraint firstItem="ksu-1Y-ZIW" firstAttribute="top" secondItem="BBu-oX-Hjs" secondAttribute="top" constant="19" id="PLZ-nq-Kev"/>
+                                    <constraint firstItem="gAz-nS-f6R" firstAttribute="leading" secondItem="ZqS-bE-3Gk" secondAttribute="trailing" constant="11" id="ZS5-jo-aod"/>
+                                    <constraint firstAttribute="bottom" secondItem="gAz-nS-f6R" secondAttribute="bottom" constant="20" id="ee2-Zl-AiQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="ksu-1Y-ZIW" secondAttribute="trailing" constant="15" id="kLF-JL-e3w"/>
+                                    <constraint firstAttribute="bottom" secondItem="ksu-1Y-ZIW" secondAttribute="bottom" constant="19" id="swp-tb-QeS"/>
+                                    <constraint firstItem="gAz-nS-f6R" firstAttribute="top" secondItem="BBu-oX-Hjs" secondAttribute="top" constant="19" id="wLU-zP-0Yu"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YJq-we-Wq8">
-                                <rect key="frame" x="0.0" y="0.0" width="334" height="734"/>
+                                <rect key="frame" x="0.0" y="60" width="333.5" height="674"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <view key="tableHeaderView" contentMode="scaleToFill" id="VVx-gL-V6t">
-                                    <rect key="frame" x="0.0" y="0.0" width="334" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="todoCell" id="eVF-zg-lIK" customClass="ToDoTableViewCell" customModule="ToDoProject" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="72" width="334" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="333.5" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eVF-zg-lIK" id="vg7-GW-meT">
-                                            <rect key="frame" x="0.0" y="0.0" width="334" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="333.5" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -101,12 +152,23 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="YJq-we-Wq8" secondAttribute="trailing" id="6Mb-Y3-eZe"/>
-                            <constraint firstItem="YJq-we-Wq8" firstAttribute="top" secondItem="Dq5-tp-Sun" secondAttribute="top" id="lJD-ck-cop"/>
+                            <constraint firstItem="YJq-we-Wq8" firstAttribute="top" secondItem="BBu-oX-Hjs" secondAttribute="bottom" id="h8W-eh-MBz"/>
+                            <constraint firstItem="BBu-oX-Hjs" firstAttribute="top" secondItem="Dq5-tp-Sun" secondAttribute="top" id="jHv-QN-ONf"/>
+                            <constraint firstAttribute="trailing" secondItem="BBu-oX-Hjs" secondAttribute="trailing" id="jJE-wM-s8i"/>
+                            <constraint firstItem="YJq-we-Wq8" firstAttribute="top" secondItem="Dq5-tp-Sun" secondAttribute="top" constant="60" id="lJD-ck-cop"/>
+                            <constraint firstItem="BBu-oX-Hjs" firstAttribute="leading" secondItem="Dq5-tp-Sun" secondAttribute="leading" id="lgL-Ma-PmP"/>
                             <constraint firstItem="YJq-we-Wq8" firstAttribute="leading" secondItem="Dq5-tp-Sun" secondAttribute="leading" id="v27-tW-y3R"/>
                             <constraint firstItem="Dq5-tp-Sun" firstAttribute="bottom" secondItem="YJq-we-Wq8" secondAttribute="bottom" id="xge-8N-zcm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Dq5-tp-Sun"/>
                     </view>
+                    <connections>
+                        <outlet property="ToDoTableView" destination="YJq-we-Wq8" id="rdU-lG-RQ9"/>
+                        <outlet property="cardsNumberLabel" destination="1Zo-74-wSd" id="TaG-Wq-rOD"/>
+                        <outlet property="columnTitleLabel" destination="gAz-nS-f6R" id="rer-4t-Sdj"/>
+                        <outlet property="headerBackgroundView" destination="BBu-oX-Hjs" id="Udk-9d-eJM"/>
+                        <outlet property="numberBackgroundView" destination="1Zo-74-wSd" id="bXB-ls-Rer"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S6V-3o-Brl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -132,9 +194,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="EhA-KA-QNR"/>
+        <segue reference="Pyt-uw-FK4"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <namedColor name="violetsAreBlue">
             <color red="0.51372549019607838" green="0.40000000000000002" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
