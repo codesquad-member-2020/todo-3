@@ -1,7 +1,10 @@
 package todo3.codesquad.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import todo3.codesquad.Controller.TodoController;
 import todo3.codesquad.domain.*;
 import todo3.codesquad.security.JwtTokenDecode;
 import todo3.codesquad.security.JwtTokenProvider;
@@ -16,6 +19,7 @@ public class TodoService {
 
     private final ColRepository colRepository;
     private final UserRepository userRepository;
+    private static final Logger log = LoggerFactory.getLogger(TodoController.class);
 
     public TodoService(ColRepository colRepository, UserRepository userRepository) {
         this.colRepository = colRepository;
@@ -58,28 +62,46 @@ public class TodoService {
         return card;
     }
 
+//    public Card updateCard(Long updateCardId, Map<String, Object> requestBody) {
+//        String colName = requestBody.get("colName").toString();
+//        Card updateCard = new Card();
+//        boolean checkCardId = true;
+//        Col col = colRepository.findColByColName(colName).orElse(null);
+//        if (col == null) {
+//            return null;
+//        }
+//        List<Card> cards = col.getCards();
+//        for (int i = 0; i < cards.size(); i++) {
+//            Long cardId = cards.get(i).getId();
+//            if (cardId.equals(updateCardId)) {
+//                updateCard = cards.get(i);
+//                updateCard.update(requestBody);
+//                checkCardId = false;
+//            }
+//        }
+//        if (checkCardId) {
+//            return null;
+//        }
+//        colRepository.save(col);
+//        return updateCard;
+//    }
+
     public Card updateCard(Long updateCardId, Map<String, Object> requestBody) {
-        String colName = requestBody.get("colName").toString();
-        Card updateCard = new Card();
-        boolean checkCardId = true;
-        Col col = colRepository.findColByColName(colName).orElse(null);
-        if (col == null) {
-            return null;
+        String title = requestBody.get("title").toString();
+        String contents = requestBody.get("contents").toString();
+        String writer = getWriterInJwtToken();
+
+        if (!title.isEmpty()) {
+            colRepository.updateCardTitleByCardId(updateCardId, title);
         }
-        List<Card> cards = col.getCards();
-        for (int i = 0; i < cards.size(); i++) {
-            Long cardId = cards.get(i).getId();
-            if (cardId.equals(updateCardId)) {
-                updateCard = cards.get(i);
-                updateCard.update(requestBody);
-                checkCardId = false;
-            }
+        if (!contents.isEmpty()) {
+            colRepository.updateCardContentsByCardId(updateCardId, contents);
         }
-        if (checkCardId) {
-            return null;
+        if (!writer.isEmpty()) {
+            colRepository.updateCardWriterByCardId(updateCardId, writer);
         }
-        colRepository.save(col);
-        return updateCard;
+
+        return colRepository.findCardByCardId(updateCardId).orElse(null);
     }
 
     public Card moveCard(Long moveCardId, Map<String, Object> requestBody) {
