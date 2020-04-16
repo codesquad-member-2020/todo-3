@@ -38,7 +38,7 @@ extension ToDoManagerViewController: UITableViewDelegate{
     private func moveCardToDone(indexPath: IndexPath, tableView: UITableView){
         let currentColumn = self.switchName(column: self.column)
         guard let lastCardIndex = self.dataSource.dataManager.cardsData?.responseData.cards.count else { return }
-        let moveCard = MoveCardForm(originColName: currentColumn, originRow: indexPath.row, destinationColName: "Done", destinationRow: "\(lastCardIndex + 1)")
+        let moveCard = MoveCardForm(originColName: currentColumn, originRow: indexPath.row+1, destinationColName: "Done", destinationRow: lastCardIndex+1)
         self.dataManager.requestMoveCard(movingInfo: moveCard)
     }
     

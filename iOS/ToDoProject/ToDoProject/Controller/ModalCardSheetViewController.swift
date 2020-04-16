@@ -27,7 +27,8 @@ class ModalCardSheetViewController: UIViewController {
     @IBAction func uploadCardButtonTapped(_ sender: Any) {
         guard let title = self.titleTextField.text else { return }
         guard let contents = self.contentsTextField.text else { return }
-        let card = NewCardForm(colName: column, row: 3, title: title, contents: contents, writer: "Lena")
+        // 이 부분 API 수정 후 row 수정하기
+        let card = NewCardForm(colName: column, row: 2, title: title, contents: contents, writer: "Lena")
         
         if originalCardId == nil{
             dataManager.requestUpdateCard(card: card, requestMethod: RequestMethod.post)

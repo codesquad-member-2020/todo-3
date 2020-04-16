@@ -106,7 +106,7 @@ class DataManager {
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         let jsonData = try? encoder.encode(movingInfo)
         if let jsonData = jsonData, let jsonString = String(data: jsonData, encoding: .utf8){
-            let url = URL(string: "http://15.164.78.121:8080/api/cards")
+            let url = URL(string: "http://15.164.78.121:8080/api/cards/move")
             var request = URLRequest(url: url!)
             request.httpMethod = RequestMethod.post
             request.httpBody = jsonData
@@ -124,6 +124,7 @@ class DataManager {
                         let decodedData = try decoder.decode(ResponseDataForm.self, from: data)
                         self.responseCard = decodedData.responseData
                         self.sendFinishToMoveNotification(movingInfo: movingInfo, movedCard: self.responseCard!)
+                        
                     } catch {
                         self.responseCard = nil
                     }

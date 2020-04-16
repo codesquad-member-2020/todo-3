@@ -51,5 +51,5 @@ struct MoveCardForm: Codable {
     let originColName: String
     let originRow: Int
     let destinationColName: String
-    let destinationRow: String
+    let destinationRow: Int
 }
