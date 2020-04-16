@@ -29,7 +29,6 @@ public class TodoController {
     @PostMapping("/api/requestToken")
     public ResponseEntity<ResponseMessage> userLogin(@RequestBody Map<String, Object> requestBody) {
         String token = todoService.issueJwtToken(requestBody);
-
         if (token == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, token), HttpStatus.NOT_FOUND);
         }
@@ -63,7 +62,7 @@ public class TodoController {
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_MOVE, movedCard), HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/cards/{cardId}")
+    @DeleteMapping("/api/columns/{columnId}/cards/{cardId}")
     public ResponseEntity<ResponseMessage> deleteCard(@PathVariable Long cardId) {
         Card deletedCard = todoService.deleteCard(cardId);
         if (deletedCard == null) {

@@ -53,9 +53,10 @@ public class TodoService {
 
         List<Card> cards = col.getCards();
         cards.add(card);
-        setRow(cards);
+        if(!newCardsSetColumn(cards , col.getColName())){
+            return null;
+        }
 
-        colRepository.save(col);
         return card;
     }
 
@@ -189,12 +190,5 @@ public class TodoService {
     private String getJwtToken(User user) {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
         return jwtTokenProvider.JwtTokenMaker(user);
-    }
-
-    private void setRow(List<Card> cards) {
-        for (int i = 0; i < cards.size(); i++) {
-            Card tempCard = cards.get(i);
-            tempCard.setRow(i + 1);
-        }
     }
 }
