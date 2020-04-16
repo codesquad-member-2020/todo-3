@@ -54,9 +54,9 @@ public class TodoController {
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_UPDATE, updateCard), HttpStatus.OK);
     }
 
-    @PatchMapping("/api/cards/{cardId}")
-    public ResponseEntity<ResponseMessage> moveCard(@PathVariable Long cardId, @RequestBody Map<String, Object> requestBody) {
-        Card movedCard = todoService.moveCard(cardId, requestBody);
+    @PatchMapping("/api/columns/{columnId}/cards/{cardId}")
+    public ResponseEntity<ResponseMessage> moveCard(@PathVariable("columnId") Long columnId, @PathVariable("cardId") Long cardId, @RequestBody Map<String, Object> requestBody) {
+        Card movedCard = todoService.moveCard(columnId, cardId, requestBody);
         if (movedCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, movedCard), HttpStatus.NOT_FOUND);
         }

@@ -77,24 +77,27 @@ public class TodoService {
         return colRepository.findCardByCardId(updateCardId).orElse(null);
     }
 
-    public Card moveCard(Long moveCardId, Map<String, Object> requestBody) {
-        String original = colRepository.findColNameByCardId(moveCardId).orElse(null);
-        String destination = requestBody.get("destinationCol").toString();
+    public Card moveCard(Long originColumnId, Long moveCardId, Map<String, Object> requestBody) {
+        Long destinationColumnId = Long.parseLong(requestBody.get("destinationId").toString());
+        Col originCol = colRepository.findById(originColumnId).orElse(null);
+        Col destinationCol = colRepository.findById(destinationColumnId).orElse(null);
+        String originColName = originCol.getColName();
+        String destinationColName = destinationCol.getColName();
         int destinationRow = Integer.parseInt(requestBody.get("destinationRow").toString());
-        if (original.equals(destination)) {
+        if (originColumnId.equals(destinationColumnId)) {
             Card card = colRepository.findCardByCardId(moveCardId).orElse(null);
             int cardRow = card.getRow();
-            List<Card> cards = colRepository.findCardsByColName(original).orElse(null);
+            List<Card> cards = colRepository.findCardsByColName(originColName).orElse(null);
             cards.remove(cardRow - 1);
             cards.add(destinationRow - 1, card);
-            if (!newCardsSetColumn(cards, destination)) {
+            if (!newCardsSetColumn(cards, destinationColName)) {
                 return null;
             }
             return card;
         }
 
-        List<Card> desCards = colRepository.findCardsByColName(destination).orElse(null);
-        List<Card> oriCards = colRepository.findCardsByColName(original).orElse(null);
+        List<Card> oriCards = colRepository.findCardsByColName(originColName).orElse(null);
+        List<Card> desCards = colRepository.findCardsByColName(destinationColName).orElse(null);
         Card movedCard = colRepository.findCardByCardId(moveCardId).orElse(null);
         for (int i = 0; i < oriCards.size(); i++) {
             Long cardId = oriCards.get(i).getId();
@@ -103,7 +106,7 @@ public class TodoService {
             }
         }
         desCards.add(destinationRow - 1, movedCard);
-        if (!newCardsSetColumn(oriCards, original) || !newCardsSetColumn(desCards, destination)) {
+        if (!newCardsSetColumn(oriCards, originCol.getColName()) || !newCardsSetColumn(desCards, destinationColName)) {
             return null;
         }
         return movedCard;
