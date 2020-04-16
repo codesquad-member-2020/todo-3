@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MobileCoreServices
 
 class ToDoManagerViewController: UIViewController {
     
@@ -74,7 +75,6 @@ class ToDoManagerViewController: UIViewController {
         } else if addedCardColumn == currentColumn && requestMethod == RequestMethod.put {
             DispatchQueue.main.async {
                 self.dataSource.dataManager = self.dataManager
-                // API 에서 row 변경하면 바꾸기
                 let editedCard = Card(id: addedCardInfo.id, row: addedCardInfo.row-1, title: addedCardInfo.title, contents: addedCardInfo.contents, writer: addedCardInfo.writer, deleted: addedCardInfo.deleted, writtenTime: addedCardInfo.writtenTime)
                 self.dataSource.dataManager.cardsData?.responseData.cards[addedCardInfo.row-1] = editedCard
                 
@@ -86,16 +86,19 @@ class ToDoManagerViewController: UIViewController {
     @objc private func updateTableViewAfterMoving(notification: Notification) {
         guard let movingInfo = notification.userInfo?[NotificationUserInfoKey.movingInfo] as? MoveCardForm else { return }
         guard let movedCard = notification.userInfo?[NotificationUserInfoKey.movedCard] as? Card else { return }
+        guard let originalCard = notification.userInfo?[NotificationUserInfoKey.originalCardInfo] as? (String,Int) else { return }
         let currentColum = switchName(column: self.column)
         guard let cardsCount = self.dataSource.dataManager.cardsData?.responseData.cards.count else { return }
+        let originalCardColumn = originalCard.0
+            let originalCardRow = originalCard.1
         DispatchQueue.main.async {
-            if currentColum == movingInfo.originColName{
+            if currentColum == originalCardColumn {
                 self.cardsNumberLabel.text = " \(cardsCount-1) "
-                self.dataSource.dataManager.cardsData?.responseData.cards.remove(at: movingInfo.originRow-1)
+                self.dataSource.dataManager.cardsData?.responseData.cards.remove(at: originalCardRow-1)
             }
-            if currentColum ==  movingInfo.destinationColName {
+            if currentColum == self.dataManager.switchColumnName(column: movingInfo.destinationId) {
                 self.cardsNumberLabel.text = " \(cardsCount+1) "
-                self.dataSource.dataManager.cardsData?.responseData.cards.insert(movedCard, at: movingInfo.destinationRow-1)
+                self.dataSource.dataManager.cardsData?.responseData.cards.insert(movedCard, at: originalCardRow-1)
             }
             self.ToDoTableView.reloadData()
         }
@@ -121,4 +124,4 @@ class ToDoManagerViewController: UIViewController {
             return ""
         }
     }
-}
+}                                   
