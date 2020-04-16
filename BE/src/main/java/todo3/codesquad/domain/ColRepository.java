@@ -30,11 +30,14 @@ public interface ColRepository extends CrudRepository<Col, Long> {
     @Query("select * from card where card.col = (select col from card where card.id = :cardId)")
     Optional<List<Card>> findCardsByCardId(@Param("cardId") Long cardId);
 
-    @Query("select * from card where deleted = 0 and card.col = :colId")
+    @Query("select * from card where deleted = 0 and card.col = :colId order by card.row asc")
     Optional<List<Card>> findNotDeletedCardsByColId(@Param("colId") Long colId);
 
-    @Query("select * from card where col.id = (select id form col where col_name = :colName)")
+    @Query("select * from card where card.col = (select id from col where col_name = :colName)")
     Optional<List<Card>> findCardsByColName(@Param("colName") String colName);
+
+    @Query("select col_name from col where col.id = (select col from card where card.id = :cardId)")
+    Optional<String> findColNameByCardId(@Param("cardId") Long cardId);
 
     @Modifying
     @Query("update card set deleted = true, row = 0 where id = :cardId")
