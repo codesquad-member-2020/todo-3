@@ -18,7 +18,6 @@ class ToDoManagerViewController: UIViewController {
     var column = ""
     var headerTitle = ""
     var numberOfCard = ""
-    private var cardList = [Card]()
     private let tableViewHeaderHeight = CGFloat(50)
     let dataSource = ToDoTableViewDataSource()
     let dataManager = DataManager()
@@ -40,11 +39,13 @@ class ToDoManagerViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self, name: DataManager.ToDoCardsDecodedNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: DataManager.AddCardCompletedNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: DataManager.FinishToMoveNotification, object: nil)
     }
     
     private func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: DataManager.ToDoCardsDecodedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTableView), name: DataManager.AddCardCompletedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTableViewAfterMoving), name: DataManager.FinishToMoveNotification, object: nil)
     }
     
     @objc private func reloadTableView(notification: Notification) {
@@ -60,20 +61,44 @@ class ToDoManagerViewController: UIViewController {
     @objc private func updateTableView(notification: Notification){
         guard let addedCardInfo = notification.userInfo?[NotificationUserInfoKey.addedCardInfo] as? Card else { return }
         guard let addedCardColumn = notification.userInfo?[NotificationUserInfoKey.addedCardColumn] as? String else { return }
-        if addedCardColumn == self.switchName(column: self.column) {
+        guard let requestMethod = notification.userInfo?[NotificationUserInfoKey.requestMethod] as? String else { return }
+        let currentColumn = self.switchName(column: self.column)
+        if addedCardColumn == currentColumn && requestMethod == RequestMethod.post {
             DispatchQueue.main.async {
-                print(#function)
                 self.dataSource.dataManager = self.dataManager
                 self.dataSource.dataManager.cardsData?.responseData.cards.append(addedCardInfo)
                 guard let cardsCount = self.dataManager.cardsDataCount() else { return }
                 self.cardsNumberLabel.text = "\(cardsCount)"
                 self.ToDoTableView.reloadData()
             }
+        } else if addedCardColumn == currentColumn && requestMethod == RequestMethod.put {
+            DispatchQueue.main.async {
+                self.dataSource.dataManager = self.dataManager
+                // API 에서 row 변경하면 바꾸기
+                let editedCard = Card(id: addedCardInfo.id, row: addedCardInfo.row, title: addedCardInfo.title, contents: addedCardInfo.contents, writer: addedCardInfo.writer, deleted: addedCardInfo.deleted, writtenTime: addedCardInfo.writtenTime)
+                self.dataSource.dataManager.cardsData?.responseData.cards[addedCardInfo.row-1] = editedCard
+
+                self.ToDoTableView.reloadData()
+            }
+        }
+    }
+
+    @objc private func updateTableViewAfterMoving(notification: Notification) {
+        guard let movingInfo = notification.userInfo?[NotificationUserInfoKey.movingInfo] as? MoveCardForm else { return }
+        guard let movedCard = notification.userInfo?[NotificationUserInfoKey.movedCard] as? Card else { return }
+        let currentColum = switchName(column: self.column)
+        // 현재 컬럼이 기존 컬럼이면 삭제
+        // 현재 컬럼이 목적지 컬럼이면 추가(insert at으로)
+        if currentColum == movingInfo.originColName{
+            self.dataSource.dataManager.cardsData?.responseData.cards.remove(at: movingInfo.originRow)
+        }
+        if currentColum ==  movingInfo.destinationColName {
+            self.dataSource.dataManager.cardsData?.responseData.cards.insert(movedCard, at: Int(movingInfo.destinationRow)!)
         }
     }
     
     @IBAction func addCardButtonTapped(_ sender: Any) {
-        let cardSheet = AddCardModalViewController()
+        let cardSheet = ModalCardSheetViewController()
         cardSheet.column = switchName(column: self.column)
         cardSheet.modalPresentationStyle = .automatic
         cardSheet.providesPresentationContextTransitionStyle = true
@@ -93,29 +118,3 @@ class ToDoManagerViewController: UIViewController {
         }
     }
 }
-
-extension ToDoManagerViewController: UITableViewDelegate{
-    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let item = tableView.cellForRow(at: indexPath)
-        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-            let moveToDone = UIAction(title: "move to done") { _ in }
-            let edit = UIAction(title: "edit...") { _ in}
-            let delete = UIAction(title: "delete", attributes: .destructive) { _ in
-                self.deleteCard(indexPath: indexPath, tableView: tableView)
-            }
-            let menu = UIMenu(title: "", children: [moveToDone, edit, delete])
-            return menu
-        }
-        return configuration
-    }
-    
-    private func deleteCard(indexPath: IndexPath, tableView: UITableView){
-        let cardToDelete = self.dataManager.cardsData?.responseData.cards[indexPath.row]
-         guard let cardIdToDelete = cardToDelete?.id else { return }
-        self.dataManager.cardsData?.responseData.cards.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .fade)
-         let cardId = DeleteCardForm(id: cardIdToDelete)
-        self.dataManager.requestDeleteCard(cardId: cardId)
-    }
-}
-
