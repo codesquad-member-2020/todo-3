@@ -34,8 +34,10 @@ class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
             guard let cardIdToDelete = cardToDelete?.id else { return }
            dataManager.cardsData?.responseData.cards.remove(at: indexPath.row)
            tableView.deleteRows(at: [indexPath], with: .fade)
-            let cardId = DeleteCardForm(id: cardIdToDelete)
-            dataManager.requestDeleteCard(cardId: cardId)
+            guard let columnId = self.dataManager.cardsData?.responseData.id else { return }
+            guard let cardId = self.dataManager.cardsData?.responseData.cards[indexPath.row].id else { return }
+            dataManager.requestDeleteCard(columnId: columnId, cardId: cardId)
         }
     }
 }
+

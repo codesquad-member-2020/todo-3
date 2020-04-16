@@ -14,6 +14,7 @@ class DataManager {
     static let AddCardCompletedNotification = NSNotification.Name("AddCardCompletedNotification")
     static let FinishToMoveNotification = NSNotification.Name("FinishToMoveNotification")
     var cardsData: ToDoCardInfo?
+    private let headerUserId = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VySW5mbyIsImV4cCI6MTU4NzEwODY1MDMzOCwidXNlck5hbWUiOiJsZW5hIiwidXNlcklkIjoibGVuYUlEIn0.AL10nktx6wLaOrisRDyZMnxmN2myulKVzLXiV5V3eCk"
     private var cardCount: String?
     private var responseCard: Card?
     private var addedCardColumn: String?
@@ -23,10 +24,13 @@ class DataManager {
     }
     
     func requestData(of column: String) {
-        let toDoCardsURL =
-        "http://15.164.78.121:8080/api/columns/\(column)"
-        guard let url = URL(string: toDoCardsURL) else { return }
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
+        let url = URL(string: "http://15.164.78.121:8080/api/columns/\(column)")
+        var request = URLRequest(url: url!)
+        request.httpMethod = RequestMethod.get
+        request.addValue(self.headerUserId, forHTTPHeaderField: "Authorization")
+        let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
             guard error == nil else { return }
             guard let data = data else { return }
             let decoder = JSONDecoder()
@@ -38,19 +42,29 @@ class DataManager {
             } catch {
                 self.cardsData = nil
             }
-        }.resume()
+        }
+        
+        task.resume()
     }
-    
+
     // Add Card and Edit Card
-    func requestUpdateCard(card: NewCardForm, requestMethod: String) {
+    func requestUpdateCard(card: NewCardForm, requestMethod: String, column: String, cardId: Int?) {
+        let columnId = switchColumnId(column: column)
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         let jsonData = try? encoder.encode(card)
         if let jsonData = jsonData, let jsonString = String(data: jsonData, encoding: .utf8){
-            let url = URL(string: "http://15.164.78.121:8080/api/cards")
+            var url = URL(string: "")
+            if cardId == nil {
+                url = URL(string: "http://15.164.78.121:8080/api/columns/\(columnId)/cards")
+            } else {
+                guard let editCardId = cardId else { return }
+                url = URL(string: "http://15.164.78.121:8080/api/columns/\(columnId)/cards/\(editCardId)")
+            }
             var request = URLRequest(url: url!)
             request.httpMethod = requestMethod
             request.httpBody = jsonData
+            request.addValue(self.headerUserId, forHTTPHeaderField: "Authorization")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
             let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
@@ -64,7 +78,7 @@ class DataManager {
                     do{
                         let decodedData = try decoder.decode(ResponseDataForm.self, from: data)
                         self.responseCard = decodedData.responseData
-                        self.addedCardColumn = card.colName
+                        self.addedCardColumn = column
                         self.sendCompletionNotification(requestMethod: requestMethod)
                     } catch {
                         self.responseCard = nil
@@ -75,17 +89,15 @@ class DataManager {
         }
     }
     
-    func requestDeleteCard(cardId: DeleteCardForm) {
+    func requestDeleteCard(columnId: Int,cardId: Int) {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
-        let jsonData = try? encoder.encode(cardId)
-        if let jsonData = jsonData, let jsonString = String(data: jsonData, encoding: .utf8){
-            let url = URL(string: "http://15.164.78.121:8080/api/cards")
+            let url = URL(string: "http://15.164.78.121:8080/api/columns/\(columnId)/cards/\(cardId)")
             var request = URLRequest(url: url!)
             request.httpMethod = RequestMethod.delete
-            request.httpBody = jsonData
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
+            request.addValue(self.headerUserId, forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
             let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
                 guard let data = data, error == nil else { print("error=\(error)")
                     return }
@@ -99,17 +111,18 @@ class DataManager {
             }
             task.resume()
         }
-    }
     
-    func requestMoveCard(movingInfo: MoveCardForm){
+    
+    func requestMoveCard(movingInfo: MoveCardForm, originalColumnId: Int, originalCardId: Int, originalCardRow: Int){
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
         let jsonData = try? encoder.encode(movingInfo)
         if let jsonData = jsonData, let jsonString = String(data: jsonData, encoding: .utf8){
-            let url = URL(string: "http://15.164.78.121:8080/api/cards/move")
+            let url = URL(string: "http://15.164.78.121:8080/api/columns/\(originalColumnId)/cards/\(originalCardId)")
             var request = URLRequest(url: url!)
-            request.httpMethod = RequestMethod.post
+            request.httpMethod = RequestMethod.patch
             request.httpBody = jsonData
+            request.addValue(self.headerUserId, forHTTPHeaderField: "Authorization")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue(String(jsonData.count), forHTTPHeaderField: "Content-Length")
             let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
@@ -123,7 +136,7 @@ class DataManager {
                     do{
                         let decodedData = try decoder.decode(ResponseDataForm.self, from: data)
                         self.responseCard = decodedData.responseData
-                        self.sendFinishToMoveNotification(movingInfo: movingInfo, movedCard: self.responseCard!)
+                        self.sendFinishToMoveNotification(movingInfo: movingInfo, movedCard: self.responseCard!, originalCardInfo: (self.switchColumnName(column: originalColumnId), originalCardRow))
                         
                     } catch {
                         self.responseCard = nil
@@ -131,6 +144,26 @@ class DataManager {
                 }
             }
             task.resume()
+        }
+    }
+    
+    func switchColumnName(column: Int) -> String{
+        switch column {
+        case 1 : return Column.toDoColumn
+        case 2 : return Column.inProgressColumn
+        case 3 : return Column.doneColumn
+        default:
+            return Column.toDoColumn
+        }
+    }
+    
+    func switchColumnId(column: String) -> Int {
+        switch column {
+        case Column.toDoColumn : return 1
+        case Column.inProgressColumn : return 2
+        case Column.doneColumn : return 3
+        default:
+            return 1
         }
     }
     
@@ -145,7 +178,7 @@ class DataManager {
     }
     
     // Usig when move card
-    private func sendFinishToMoveNotification(movingInfo: MoveCardForm, movedCard: Card) {
-        NotificationCenter.default.post(name: DataManager.FinishToMoveNotification, object: nil, userInfo: [NotificationUserInfoKey.movingInfo: movingInfo, NotificationUserInfoKey.movedCard: movedCard])
+    private func sendFinishToMoveNotification(movingInfo: MoveCardForm, movedCard: Card, originalCardInfo: (String,Int)) {
+        NotificationCenter.default.post(name: DataManager.FinishToMoveNotification, object: nil, userInfo: [NotificationUserInfoKey.movingInfo: movingInfo, NotificationUserInfoKey.movedCard: movedCard, NotificationUserInfoKey.originalCardInfo: originalCardInfo])
     }
 }

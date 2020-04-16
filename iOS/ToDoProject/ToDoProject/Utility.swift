@@ -41,10 +41,13 @@ enum NotificationUserInfoKey {
     static let requestMethod = "requestMethod"
     static let movingInfo = "movingInfo"
     static let movedCard = "movedCard"
+    static let originalCardInfo = "originalCardInfo"
 }
 
 enum RequestMethod {
-    static let post = "Post"
-    static let put = "Put" // edit card
-    static let delete = "Delete" // delete card
+    static let get = "GET"
+    static let post = "POST"
+    static let put = "PUT" // edit card
+    static let patch = "PATCH"
+    static let delete = "DELETE" // delete card
 }
