@@ -1,7 +1,10 @@
 package todo3.codesquad.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import todo3.codesquad.Controller.TodoController;
 import todo3.codesquad.domain.*;
 import todo3.codesquad.security.JwtTokenDecode;
 import todo3.codesquad.security.JwtTokenProvider;
@@ -16,6 +19,7 @@ public class TodoService {
 
     private final ColRepository colRepository;
     private final UserRepository userRepository;
+    private static final Logger log = LoggerFactory.getLogger(TodoController.class);
 
     public TodoService(ColRepository colRepository, UserRepository userRepository) {
         this.colRepository = colRepository;
@@ -59,59 +63,77 @@ public class TodoService {
     }
 
     public Card updateCard(Long updateCardId, Map<String, Object> requestBody) {
-        String colName = requestBody.get("colName").toString();
-        Card updateCard = new Card();
-        boolean checkCardId = true;
-        Col col = colRepository.findColByColName(colName).orElse(null);
-        if (col == null) {
-            return null;
+        String title = requestBody.get("title").toString();
+        String contents = requestBody.get("contents").toString();
+        String writer = getWriterInJwtToken();
+
+        if (!title.isEmpty()) {
+            colRepository.updateCardTitleByCardId(updateCardId, title);
         }
-        List<Card> cards = col.getCards();
-        for (int i = 0; i < cards.size(); i++) {
-            Long cardId = cards.get(i).getId();
-            if (cardId.equals(updateCardId)) {
-                updateCard = cards.get(i);
-                updateCard.update(requestBody);
-                checkCardId = false;
-            }
+        if (!contents.isEmpty()) {
+            colRepository.updateCardContentsByCardId(updateCardId, contents);
         }
-        if (checkCardId) {
-            return null;
+        if (!writer.isEmpty()) {
+            colRepository.updateCardWriterByCardId(updateCardId, writer);
         }
-        colRepository.save(col);
-        return updateCard;
+
+        return colRepository.findCardByCardId(updateCardId).orElse(null);
     }
 
     public Card moveCard(Long moveCardId, Map<String, Object> requestBody) {
-        Card card = colRepository.findCardByCardId(moveCardId).orElse(null);
-        if (card == null) {
-            return null;
-        }
-
-        String destinationColName = requestBody.get("destinationCol").toString();
+        String original = colRepository.findColNameByCardId(moveCardId).orElse(null);
+        String destination = requestBody.get("destinationCol").toString();
         int destinationRow = Integer.parseInt(requestBody.get("destinationRow").toString());
-        int originRow = card.getRow();
+        if (original.equals(destination)){
+            Card card = colRepository.findCardByCardId(moveCardId).orElse(null);
+            int cardRow = card.getRow();
+            List<Card> cards = colRepository.findCardsByColName(original).orElse(null);
+            cards.remove(cardRow - 1);
+            cards.add(destinationRow -1, card);
+            if(!newCardsSetColumn(cards,destination)){
+                return null;
+            }
+            return card;
+        }
 
-        Col originCol = colRepository.findColByCardId(moveCardId).orElse(null);
-        Col destinationCol = colRepository.findColByColName(destinationColName).orElse(null);
-        if (originCol == null || destinationCol == null) {
+        List<Card> desCards = colRepository.findCardsByColName(destination).orElse(null);
+        List<Card> oriCards = colRepository.findCardsByColName(original).orElse(null);
+        Card movedCard = colRepository.findCardByCardId(moveCardId).orElse(null);
+        for (int i = 0; i < oriCards.size(); i++) {
+            Long cardId = oriCards.get(i).getId();
+            if (cardId.equals(moveCardId)){
+                oriCards.remove(i);
+            }
+        }
+        desCards.add(destinationRow-1,movedCard);
+        if(!newCardsSetColumn(oriCards,original) || !newCardsSetColumn(desCards,destination)){
             return null;
         }
+        return movedCard;
+    }
 
-        List<Card> oriCards = originCol.getCards();
-        List<Card> desCards = destinationCol.getCards();
-
-        oriCards.remove(originRow - 1);
-        desCards.set(destinationRow, card);
-
-        for (int i = 0; i < desCards.size(); i++) {
-            Card tempCard = desCards.get(i);
-            tempCard.setRow(i + 1);
+    private boolean newCardsSetColumn(List<Card> cards , String columnName){
+        List<Card> newCards = cardsRowReset(cards);
+        Col column = colRepository.findColByColName(columnName).orElse(null);
+        if (column == null){
+            return false;
         }
+        column.setCards(newCards);
+        colRepository.save(column);
+        return true;
+    }
 
-        colRepository.save(originCol);
-        colRepository.save(destinationCol);
-        return card;
+    public List<Card> cardsRowReset(List<Card> cards) {
+        int rowIdx = 1;
+        for (int i = 0; i < cards.size(); i++) {
+            Card tempCard = cards.get(i);
+            if(tempCard.getDeleted() || tempCard.getRow() == 0){
+                continue;
+            }
+            tempCard.setRow(rowIdx);
+            rowIdx++;
+        }
+        return cards;
     }
 
     public Card deleteCard(Long deleteCardId) {
