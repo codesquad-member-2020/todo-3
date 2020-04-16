@@ -39,25 +39,22 @@ public class TodoService {
         return token;
     }
 
-    public Card createCard(Map<String, Object> requestBody) {
-        if (requestBody.get("colName") == null) {
+    public Card createCard(Long columnId, Map<String, Object> requestBody) {
+        Col col = colRepository.findById(columnId).orElse(null);
+        if (col == null) {
             return null;
         }
-
-        String colName = requestBody.get("colName").toString();
-        Col col = colRepository.findColByColName(colName).orElse(null);
-
         if (col.getCards() == null) {
             return null;
         }
+
         String writer = getWriterInJwtToken();
-        List<Card> cards = col.getCards();
         Card card = new Card(requestBody, writer);
+
+        List<Card> cards = col.getCards();
         cards.add(card);
-        for (int i = 0; i < cards.size(); i++) {
-            Card tempCard = cards.get(i);
-            tempCard.setRow(i + 1);
-        }
+        setRow(cards);
+
         colRepository.save(col);
         return card;
     }
@@ -84,13 +81,13 @@ public class TodoService {
         String original = colRepository.findColNameByCardId(moveCardId).orElse(null);
         String destination = requestBody.get("destinationCol").toString();
         int destinationRow = Integer.parseInt(requestBody.get("destinationRow").toString());
-        if (original.equals(destination)){
+        if (original.equals(destination)) {
             Card card = colRepository.findCardByCardId(moveCardId).orElse(null);
             int cardRow = card.getRow();
             List<Card> cards = colRepository.findCardsByColName(original).orElse(null);
             cards.remove(cardRow - 1);
-            cards.add(destinationRow -1, card);
-            if(!newCardsSetColumn(cards,destination)){
+            cards.add(destinationRow - 1, card);
+            if (!newCardsSetColumn(cards, destination)) {
                 return null;
             }
             return card;
@@ -101,21 +98,21 @@ public class TodoService {
         Card movedCard = colRepository.findCardByCardId(moveCardId).orElse(null);
         for (int i = 0; i < oriCards.size(); i++) {
             Long cardId = oriCards.get(i).getId();
-            if (cardId.equals(moveCardId)){
+            if (cardId.equals(moveCardId)) {
                 oriCards.remove(i);
             }
         }
-        desCards.add(destinationRow-1,movedCard);
-        if(!newCardsSetColumn(oriCards,original) || !newCardsSetColumn(desCards,destination)){
+        desCards.add(destinationRow - 1, movedCard);
+        if (!newCardsSetColumn(oriCards, original) || !newCardsSetColumn(desCards, destination)) {
             return null;
         }
         return movedCard;
     }
 
-    private boolean newCardsSetColumn(List<Card> cards , String columnName){
+    private boolean newCardsSetColumn(List<Card> cards, String columnName) {
         List<Card> newCards = cardsRowReset(cards);
         Col column = colRepository.findColByColName(columnName).orElse(null);
-        if (column == null){
+        if (column == null) {
             return false;
         }
         column.setCards(newCards);
@@ -127,7 +124,7 @@ public class TodoService {
         int rowIdx = 1;
         for (int i = 0; i < cards.size(); i++) {
             Card tempCard = cards.get(i);
-            if(tempCard.getDeleted() || tempCard.getRow() == 0){
+            if (tempCard.getDeleted() || tempCard.getRow() == 0) {
                 continue;
             }
             tempCard.setRow(rowIdx);
@@ -189,5 +186,12 @@ public class TodoService {
     private String getJwtToken(User user) {
         JwtTokenProvider jwtTokenProvider = new JwtTokenProvider();
         return jwtTokenProvider.JwtTokenMaker(user);
+    }
+
+    private void setRow(List<Card> cards) {
+        for (int i = 0; i < cards.size(); i++) {
+            Card tempCard = cards.get(i);
+            tempCard.setRow(i + 1);
+        }
     }
 }

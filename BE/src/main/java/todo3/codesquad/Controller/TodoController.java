@@ -36,9 +36,9 @@ public class TodoController {
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_LOGIN, token), HttpStatus.OK);
     }
 
-    @PostMapping("/api/cards")
-    public ResponseEntity<ResponseMessage> createCard(@RequestBody Map<String, Object> requestBody) {
-        Card newCard = todoService.createCard(requestBody);
+    @PostMapping("/api/columns/{columnId}/cards")
+    public ResponseEntity<ResponseMessage> createCard(@PathVariable ("columnId") Long columnId, @RequestBody Map<String, Object> requestBody) {
+        Card newCard = todoService.createCard(columnId, requestBody);
         if (newCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);
         }

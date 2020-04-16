@@ -8,7 +8,10 @@ import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
-@Getter @Setter @ToString @NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class Col {
 
     @Id
