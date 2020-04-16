@@ -1,30 +1,39 @@
 //
-//  ModalCardSheetViewController.swift
+//  AddCardModalViewController.swift
 //  ToDoProject
 //
-//  Created by Keunna Lee on 2020/04/16.
+//  Created by Keunna Lee on 2020/04/13.
 //  Copyright © 2020 dev-Lena. All rights reserved.
 //
 
 import UIKit
 
 class ModalCardSheetViewController: UIViewController {
-
+    
+    var column = ""
+    var originalCardId: Int?
+    private let dataManager = DataManager()
+    @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var contentsTextField: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    @IBAction func cancleButtonTapped(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
-    */
-
+    
+    @IBAction func uploadCardButtonTapped(_ sender: Any) {
+        guard let title = self.titleTextField.text else { return }
+        guard let contents = self.contentsTextField.text else { return }
+        let card = NewCardForm(colName: column, row: 3, title: title, contents: contents, writer: "Lena")
+        
+        if originalCardId == nil{
+            dataManager.requestUpdateCard(card: card, requestMethod: RequestMethod.post)
+        } else {
+            dataManager.requestUpdateCard(card: card, requestMethod: RequestMethod.put)
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
 }
