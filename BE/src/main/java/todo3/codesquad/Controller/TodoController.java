@@ -29,24 +29,23 @@ public class TodoController {
     @PostMapping("/api/requestToken")
     public ResponseEntity<ResponseMessage> userLogin(@RequestBody Map<String, Object> requestBody) {
         String token = todoService.issueJwtToken(requestBody);
-
         if (token == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, token), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_LOGIN, token), HttpStatus.OK);
     }
 
-    @PostMapping("/api/cards")
-    public ResponseEntity<ResponseMessage> createCard(@RequestBody Map<String, Object> requestBody) {
-        Card newCard = todoService.createCard(requestBody);
+    @PostMapping("/api/columns/{columnId}/cards")
+    public ResponseEntity<ResponseMessage> createCard(@PathVariable("columnId") Long columnId, @RequestBody Map<String, Object> requestBody) {
+        Card newCard = todoService.createCard(columnId, requestBody);
         if (newCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_CREATE, newCard), HttpStatus.OK);
     }
 
-    @PutMapping("/api/cards/{cardId}")
-    public ResponseEntity<ResponseMessage> updateCard(@PathVariable Long cardId, @RequestBody Map<String, Object> requestBody) {
+    @PutMapping("/api/columns/{columnId}/cards/{cardId}")
+    public ResponseEntity<ResponseMessage> updateCard(@PathVariable("cardId") Long cardId, @RequestBody Map<String, Object> requestBody) {
         Card updateCard = todoService.updateCard(cardId, requestBody);
         if (updateCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, updateCard), HttpStatus.NOT_FOUND);
@@ -54,16 +53,16 @@ public class TodoController {
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_UPDATE, updateCard), HttpStatus.OK);
     }
 
-    @PatchMapping("/api/cards/{cardId}")
-    public ResponseEntity<ResponseMessage> moveCard(@PathVariable Long cardId, @RequestBody Map<String, Object> requestBody) {
-        Card movedCard = todoService.moveCard(cardId, requestBody);
+    @PatchMapping("/api/columns/{columnId}/cards/{cardId}")
+    public ResponseEntity<ResponseMessage> moveCard(@PathVariable("columnId") Long columnId, @PathVariable("cardId") Long cardId, @RequestBody Map<String, Object> requestBody) {
+        Card movedCard = todoService.moveCard(columnId, cardId, requestBody);
         if (movedCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, movedCard), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_MOVE, movedCard), HttpStatus.OK);
     }
 
-    @DeleteMapping("/api/cards/{cardId}")
+    @DeleteMapping("/api/columns/{columnId}/cards/{cardId}")
     public ResponseEntity<ResponseMessage> deleteCard(@PathVariable Long cardId) {
         Card deletedCard = todoService.deleteCard(cardId);
         if (deletedCard == null) {

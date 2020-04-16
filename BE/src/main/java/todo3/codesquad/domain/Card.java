@@ -37,6 +37,7 @@ public class Card {
             this.title = map.get("title").toString();
         }
         this.contents = map.get("contents").toString();
+        this.row = 1;
         this.writer = writer;
         this.deleted = false;
         this.writtenTime = LocalDateTime.now();
