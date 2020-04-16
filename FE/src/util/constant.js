@@ -6,9 +6,16 @@
 //   DELETE: 'http://15.164.78.121:8080/api/cards/delete'
 // }
 
-const DEFAULT_URL = 'http://15.164.78.121/api/cards';
+const DEFAULT_URL = 'http://15.164.78.121/api';
 export const URL = {
   DEFAULT: DEFAULT_URL,
-  SHOW: `${DEFAULT_URL}/show`,
-  MOVE: `${DEFAULT_URL}/move`
+  TOKEN: `${DEFAULT_URL}/requestToken`,
+  SHOW: `${DEFAULT_URL}/cards/show`,
+  MOVE: `${DEFAULT_URL}/cards/move`
+}
+
+export const USER = {
+  INFO : {
+    "userId" : "ariId"
+  }
 }

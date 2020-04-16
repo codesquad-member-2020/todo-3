@@ -1,20 +1,36 @@
 import '../style/style.scss';
-import { Column } from './view/Column.js';
-import { getElement, hide } from './util/dom';
-import { dragDropHandle } from './view/dragDropEvent';
+import { getElement, hide, show } from './util/dom';
+import { dragEventHandle } from './view/dragDropEvent.js';
+import { requestToken } from './data/http';
+import { USER, URL } from './util/constant';
+import { controller } from './controller/controller.js';
 
-const todoColumn = new Column('To do', 0);
-const inProgressColumn = new Column('In Progress', 1);
-const doneColumn = new Column('Done', 2);
+window.addEventListener('DOMContentLoaded', () => initLogin());
 
-window.addEventListener('DOMContentLoaded', () => handelLoad());
+const initLogin = () => {
+  getElement('.login-btn').addEventListener('click', () => loginHandler());
+}
+
+const loginHandler = async () => {
+  if(!localStorage.getItem('token')) {
+    const responseToken = await requestToken(URL.TOKEN, USER.INFO);
+    localStorage.setItem("token", JSON.stringify(responseToken.responseData));
+  }
+  getElement('.loader').style.display = 'flex';
+  getElement('.login').remove();
+
+  await handelLoad();
+}
 
 const handelLoad = async () => {
-  await todoColumn.init();
-  await inProgressColumn.init();
-  await doneColumn.init();
+  await controller.init();
 
   setTimeout(() => {
-    hide(getElement('.loader'));
+    getElement('.loader').remove();
+    getElement('header').style.display = 'flex';
+    getElement('.container').style.display = 'flex';
   }, 500);
+
+  // dragEventHandle();
 }
+
