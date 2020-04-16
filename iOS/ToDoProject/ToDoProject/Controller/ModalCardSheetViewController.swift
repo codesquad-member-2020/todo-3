@@ -8,9 +8,10 @@
 
 import UIKit
 
-class AddCardModalViewController: UIViewController {
+class ModalCardSheetViewController: UIViewController {
     
     var column = ""
+    var originalCardId: Int?
     private let dataManager = DataManager()
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextField: UITextView!
@@ -22,12 +23,18 @@ class AddCardModalViewController: UIViewController {
     @IBAction func cancleButtonTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     @IBAction func uploadCardButtonTapped(_ sender: Any) {
         guard let title = self.titleTextField.text else { return }
         guard let contents = self.contentsTextField.text else { return }
-        let card = AddCardForm(colName: column, row: 10, title: title, contents: contents, writer: "Lena")
-        dataManager.requestAddCard(card: card)
+        // 이 부분 API 수정 후 row 수정하기
+        let card = NewCardForm(colName: column, row: 2, title: title, contents: contents, writer: "Lena")
+        
+        if originalCardId == nil{
+            dataManager.requestUpdateCard(card: card, requestMethod: RequestMethod.post)
+        } else {
+            dataManager.requestUpdateCard(card: card, requestMethod: RequestMethod.put)
+        }
         self.dismiss(animated: true, completion: nil)
     }
 }

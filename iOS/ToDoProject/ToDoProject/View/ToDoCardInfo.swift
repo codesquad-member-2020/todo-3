@@ -23,14 +23,14 @@ struct ToDoCard: Codable {
 struct Card: Codable {
     let id: Int
     let row: Int
-    let title: String
-    let contents: String
+    var title: String
+    var contents: String
     let writer: String
     let deleted: Bool
     let writtenTime: String
 }
 
-struct AddCardForm: Codable{
+struct NewCardForm: Codable{
     let colName: String
     let row: Int
     let title: String
@@ -45,4 +45,11 @@ struct ResponseDataForm: Codable {
 
 struct DeleteCardForm: Codable {
     let id: Int
+}
+
+struct MoveCardForm: Codable {
+    let originColName: String
+    let originRow: Int
+    let destinationColName: String
+    let destinationRow: Int
 }

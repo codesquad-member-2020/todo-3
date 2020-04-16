@@ -36,6 +36,11 @@ enum NotificationUserInfoKey {
     static let cardCount = "cardCount"
     static let addedCardInfo = "addedCardInfo"
     static let addedCardColumn = "addedCardColumn"
+    static let columnName = "columnName"
+    static let cardRow = "cardRow"
+    static let requestMethod = "requestMethod"
+    static let movingInfo = "movingInfo"
+    static let movedCard = "movedCard"
 }
 
 enum RequestMethod {

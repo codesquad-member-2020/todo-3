@@ -16,16 +16,18 @@ class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
         return dataManager.cardsDataCount() ?? 0
     }
     
+    // Provide Data in Cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.identifier, for: indexPath) as! ToDoTableViewCell
         let cardData = dataManager.cardsData?.responseData.cards[indexPath.row]
-        
+        //context menu
         cell.titleLabel.text = cardData?.title
         cell.contentLabel.text = cardData?.contents
         cell.authorLabel.text = cardData?.writer
         return cell
     }
     
+    // Delete Card
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
            let cardToDelete = dataManager.cardsData?.responseData.cards[indexPath.row]
