@@ -18,16 +18,5 @@ public class CodesquadApplication implements WebMvcConfigurer {
         SpringApplication.run(CodesquadApplication.class, args);
     }
 
-    @Bean
-    public LoginInterceptor loginInterceptor() {
-        return new LoginInterceptor();
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor())
-                .addPathPatterns("/api/**")
-                .excludePathPatterns("/api/requestToken");
-    }
 }
 

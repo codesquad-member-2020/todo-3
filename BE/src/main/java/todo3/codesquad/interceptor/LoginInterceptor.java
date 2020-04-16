@@ -19,13 +19,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     private static final String URL = "URL";
     private static final String METHOD = "METHOD";
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         request.setAttribute(TIME, System.currentTimeMillis());
         request.setAttribute(URL, request.getRequestURL());
         request.setAttribute(METHOD, request.getMethod());
         String givenToken = request.getHeader(TOKEN_KEY_IN_HEADER);
+
+        if (request.getMethod().equals("OPTIONS")) {
+            log.info("options 메서드는 통과");
+            return true;
+        }
+
         if (givenToken == null) {
             log.debug("There is no token");
             return false;
