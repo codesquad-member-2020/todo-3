@@ -37,7 +37,7 @@ public class TodoController {
     }
 
     @PostMapping("/api/columns/{columnId}/cards")
-    public ResponseEntity<ResponseMessage> createCard(@PathVariable ("columnId") Long columnId, @RequestBody Map<String, Object> requestBody) {
+    public ResponseEntity<ResponseMessage> createCard(@PathVariable("columnId") Long columnId, @RequestBody Map<String, Object> requestBody) {
         Card newCard = todoService.createCard(columnId, requestBody);
         if (newCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, newCard), HttpStatus.NOT_FOUND);
@@ -45,8 +45,8 @@ public class TodoController {
         return new ResponseEntity<>(new ResponseMessage(SuccessMessage.SUCCESS_CREATE, newCard), HttpStatus.OK);
     }
 
-    @PutMapping("/api/cards/{cardId}")
-    public ResponseEntity<ResponseMessage> updateCard(@PathVariable Long cardId, @RequestBody Map<String, Object> requestBody) {
+    @PutMapping("/api/columns/{columnId}/cards/{cardId}")
+    public ResponseEntity<ResponseMessage> updateCard(@PathVariable("cardId") Long cardId, @RequestBody Map<String, Object> requestBody) {
         Card updateCard = todoService.updateCard(cardId, requestBody);
         if (updateCard == null) {
             return new ResponseEntity<>(new ResponseMessage(FailedMessage.SIZE_ERROR_MESSAGE, updateCard), HttpStatus.NOT_FOUND);
