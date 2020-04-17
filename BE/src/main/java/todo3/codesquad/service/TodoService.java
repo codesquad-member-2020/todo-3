@@ -53,7 +53,7 @@ public class TodoService {
 
         List<Card> cards = col.getCards();
         cards.add(card);
-        if(!newCardsSetColumn(cards , col.getColName())){
+        if (!newCardsSetColumn(cards, col.getColName())) {
             return null;
         }
 
@@ -79,6 +79,9 @@ public class TodoService {
     }
 
     public Card moveCard(Long originColumnId, Long moveCardId, Map<String, Object> requestBody) {
+        log.info("Card ID --------------{}", originColumnId);
+        log.info("Destination Row ------------{}", requestBody.get("destinationRow").toString());
+        log.info("Destination Col ------------{}", requestBody.get("destinationId").toString());
         Long destinationColumnId = Long.parseLong(requestBody.get("destinationId").toString());
         Col originCol = colRepository.findById(originColumnId).orElse(null);
         Col destinationCol = colRepository.findById(destinationColumnId).orElse(null);
@@ -90,7 +93,11 @@ public class TodoService {
             int cardRow = card.getRow();
             List<Card> cards = colRepository.findCardsByColName(originColName).orElse(null);
             cards.remove(cardRow - 1);
-            cards.add(destinationRow - 1, card);
+            if (destinationRow == 99) {
+                cards.add(card);
+            } else {
+                cards.add(destinationRow - 1, card);
+            }
             if (!newCardsSetColumn(cards, destinationColName)) {
                 return null;
             }
@@ -106,7 +113,11 @@ public class TodoService {
                 oriCards.remove(i);
             }
         }
-        desCards.add(destinationRow - 1, movedCard);
+        if (destinationRow == 99) {
+            desCards.add(movedCard);
+        } else {
+            desCards.add(destinationRow - 1, movedCard);
+        }
         if (!newCardsSetColumn(oriCards, originCol.getColName()) || !newCardsSetColumn(desCards, destinationColName)) {
             return null;
         }
@@ -138,6 +149,7 @@ public class TodoService {
     }
 
     public Card deleteCard(Long deleteCardId) {
+        log.info("Deleted Card ID----------------{}",deleteCardId );
         if (colRepository.deleteCardByCardId(deleteCardId)) {
             Col col = colRepository.findColByCardId(deleteCardId).orElse(null);
             List<Card> cards = col.getCards();
