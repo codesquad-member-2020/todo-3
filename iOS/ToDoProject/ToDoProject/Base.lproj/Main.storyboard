@@ -57,12 +57,16 @@
                     <navigationItem key="navigationItem" id="ZcI-Jg-frL">
                         <barButtonItem key="rightBarButtonItem" title="Menu" id="PIB-3H-dWN">
                             <color key="tintColor" name="violetsAreBlue"/>
+                            <connections>
+                                <action selector="MenuButtonTapped:" destination="BYZ-38-t0r" id="bhD-7O-2ly"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="doneListContainerView" destination="ivY-Yd-mZP" id="baj-xJ-zVt"/>
                         <outlet property="inProgressListContainerView" destination="oB1-uL-wfF" id="1mc-hi-6uy"/>
+                        <outlet property="menuButton" destination="PIB-3H-dWN" id="Qvr-uP-ipF"/>
                         <outlet property="toDoListContainerView" destination="ATt-Dq-VT9" id="Wax-Sb-nHy"/>
                     </connections>
                 </viewController>

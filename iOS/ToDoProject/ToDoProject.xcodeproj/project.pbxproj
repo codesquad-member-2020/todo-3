@@ -10,6 +10,9 @@
 		6A02539224476BB500477ABE /* TableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A02539124476BB500477ABE /* TableViewDelegate.swift */; };
 		6A0253952447710E00477ABE /* ModalCardSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0253932447710E00477ABE /* ModalCardSheetViewController.swift */; };
 		6A0253962447710E00477ABE /* ModalCardSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A0253942447710E00477ABE /* ModalCardSheetViewController.xib */; };
+		6A02539A2448A61000477ABE /* TableVIewDragAndDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0253992448A61000477ABE /* TableVIewDragAndDropDelegate.swift */; };
+		6A02539D2448EE5600477ABE /* PoPOverMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A02539B2448EE5600477ABE /* PoPOverMenuViewController.swift */; };
+		6A02539E2448EE5600477ABE /* PoPOverMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6A02539C2448EE5600477ABE /* PoPOverMenuViewController.xib */; };
 		6A21A9A824402D12009B2983 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A21A9A724402D12009B2983 /* Utility.swift */; };
 		6A74866A243AEFB200D89B3D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A748669243AEFB200D89B3D /* AppDelegate.swift */; };
 		6A74866C243AEFB200D89B3D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A74866B243AEFB200D89B3D /* SceneDelegate.swift */; };
@@ -40,6 +43,9 @@
 		6A02539124476BB500477ABE /* TableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDelegate.swift; sourceTree = "<group>"; };
 		6A0253932447710E00477ABE /* ModalCardSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalCardSheetViewController.swift; sourceTree = "<group>"; };
 		6A0253942447710E00477ABE /* ModalCardSheetViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ModalCardSheetViewController.xib; sourceTree = "<group>"; };
+		6A0253992448A61000477ABE /* TableVIewDragAndDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableVIewDragAndDropDelegate.swift; sourceTree = "<group>"; };
+		6A02539B2448EE5600477ABE /* PoPOverMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoPOverMenuViewController.swift; sourceTree = "<group>"; };
+		6A02539C2448EE5600477ABE /* PoPOverMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PoPOverMenuViewController.xib; sourceTree = "<group>"; };
 		6A21A9A724402D12009B2983 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		6A748666243AEFB200D89B3D /* ToDoProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A748669243AEFB200D89B3D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +155,9 @@
 				6A02539124476BB500477ABE /* TableViewDelegate.swift */,
 				6A0253932447710E00477ABE /* ModalCardSheetViewController.swift */,
 				6A0253942447710E00477ABE /* ModalCardSheetViewController.xib */,
+				6A0253992448A61000477ABE /* TableVIewDragAndDropDelegate.swift */,
+				6A02539B2448EE5600477ABE /* PoPOverMenuViewController.swift */,
+				6A02539C2448EE5600477ABE /* PoPOverMenuViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -239,6 +248,7 @@
 				6A748671243AEFB200D89B3D /* Main.storyboard in Resources */,
 				6A0253962447710E00477ABE /* ModalCardSheetViewController.xib in Resources */,
 				6A820547243F32C40057780D /* ToDoTableViewCell.xib in Resources */,
+				6A02539E2448EE5600477ABE /* PoPOverMenuViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,9 +267,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A21A9A824402D12009B2983 /* Utility.swift in Sources */,
+				6A02539A2448A61000477ABE /* TableVIewDragAndDropDelegate.swift in Sources */,
 				6A74868F243B48BD00D89B3D /* ToDoManagerViewController.swift in Sources */,
 				6A0253952447710E00477ABE /* ModalCardSheetViewController.swift in Sources */,
 				6A820540243F0D340057780D /* DataManager.swift in Sources */,
+				6A02539D2448EE5600477ABE /* PoPOverMenuViewController.swift in Sources */,
 				6A74866E243AEFB200D89B3D /* MasterViewController.swift in Sources */,
 				6A820546243F32C40057780D /* ToDoTableViewCell.swift in Sources */,
 				6A74866A243AEFB200D89B3D /* AppDelegate.swift in Sources */,

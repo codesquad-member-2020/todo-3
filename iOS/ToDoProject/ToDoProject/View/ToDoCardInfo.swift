@@ -50,3 +50,17 @@ struct MoveCardForm: Codable {
     let destinationId: Int
     let destinationRow: Int
 }
+
+struct DraggedCard {
+    let draggedCardInfo: Card
+    let draggedCardIndex: Int
+    let draggedCardColumnId: Int
+}
+
+struct CardToDropInfo {
+    let sourceColumnId: Int
+    let sourceCardRow: Int
+    let destinationColumnId: Int
+    let destinationCardRow: Int
+    let cardToDrop: Card
+}
