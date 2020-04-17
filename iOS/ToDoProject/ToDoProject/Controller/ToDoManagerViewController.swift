@@ -16,13 +16,18 @@ class ToDoManagerViewController: UIViewController {
     @IBOutlet weak var columnTitleLabel: UILabel!
     @IBOutlet weak var numberBackgroundView: UILabel!
     @IBOutlet weak var ToDoTableView: UITableView!
+    static let ToDoCardStartToMoveNotification = NSNotification.Name("ToDoCardStartToMoveNotification")
+   static let ToDoCardDoneToMoveNotification = NSNotification.Name("ToDoCardDoneToMoveNotification")
     var column = ""
     var headerTitle = ""
     var numberOfCard = ""
+    var dragedCard: Card? = nil
+    var dragedCardIndex: Int? = nil
     private let tableViewHeaderHeight = CGFloat(50)
     let dataSource = ToDoTableViewDataSource()
     let dataManager = DataManager()
     private let nib = UINib(nibName: "ToDoTableViewCell", bundle: nil)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,18 +40,25 @@ class ToDoManagerViewController: UIViewController {
         setupNotification()
         columnTitleLabel.text = headerTitle
         self.ToDoTableView.delegate = self
+
+        // Drag & Drop
+        self.ToDoTableView.dragInteractionEnabled = true
+        self.ToDoTableView.dragDelegate = self
+        self.ToDoTableView.dropDelegate = self
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: DataManager.ToDoCardsDecodedNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: DataManager.AddCardCompletedNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: DataManager.FinishToMoveNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: ToDoTableViewDataSource.DragAndDropNotification, object: nil)
     }
     
     private func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableView), name: DataManager.ToDoCardsDecodedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTableView), name: DataManager.AddCardCompletedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateTableViewAfterMoving), name: DataManager.FinishToMoveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(sendDragedCard), name: ToDoTableViewDataSource.DragAndDropNotification, object: nil)
     }
     
     @objc private func reloadTableView(notification: Notification) {
@@ -98,7 +110,8 @@ class ToDoManagerViewController: UIViewController {
             }
             if currentColum == self.dataManager.switchColumnName(column: movingInfo.destinationId) {
                 self.cardsNumberLabel.text = " \(cardsCount+1) "
-                self.dataSource.dataManager.cardsData?.responseData.cards.insert(movedCard, at: originalCardRow-1)
+                guard let lastIndex = self.dataSource.dataManager.cardsData?.responseData.cards.count else {return}
+                self.dataSource.dataManager.cardsData?.responseData.cards.insert(movedCard, at: lastIndex)
             }
             self.ToDoTableView.reloadData()
         }
@@ -123,5 +136,12 @@ class ToDoManagerViewController: UIViewController {
         default:
             return ""
         }
+    }
+    func sendToDoCardStartToMoveNotification(card: Card, sourceColumnId: Int, sourceCardIndexRow: Int) {
+        NotificationCenter.default.post(name: ToDoManagerViewController.ToDoCardStartToMoveNotification, object: nil, userInfo: [NotificationUserInfoKey.startToMoveCard: card, NotificationUserInfoKey.sourceColumnId: sourceColumnId, NotificationUserInfoKey.sourceCardIndexRow: sourceCardIndexRow])
+    }
+    
+     func sendFinishToMoveNotification() {
+        NotificationCenter.default.post(name: ToDoManagerViewController.ToDoCardDoneToMoveNotification, object: nil)
     }
 }                                   

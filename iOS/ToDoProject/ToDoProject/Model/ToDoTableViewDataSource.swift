@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import MobileCoreServices
 
 class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
     
+    static let DragAndDropNotification = NSNotification.Name("DragAndDropNotification")
     var dataManager = DataManager()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -20,7 +22,7 @@ class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.identifier, for: indexPath) as! ToDoTableViewCell
         let cardData = dataManager.cardsData?.responseData.cards[indexPath.row]
-        //context menu
+        //context menu - Edit
         cell.titleLabel.text = cardData?.title
         cell.contentLabel.text = cardData?.contents
         cell.authorLabel.text = cardData?.writer
@@ -30,14 +32,34 @@ class ToDoTableViewDataSource: NSObject, UITableViewDataSource {
     // Delete Card
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-           let cardToDelete = dataManager.cardsData?.responseData.cards[indexPath.row]
-            guard let cardIdToDelete = cardToDelete?.id else { return }
-           dataManager.cardsData?.responseData.cards.remove(at: indexPath.row)
-           tableView.deleteRows(at: [indexPath], with: .fade)
-            guard let columnId = self.dataManager.cardsData?.responseData.id else { return }
-            guard let cardId = self.dataManager.cardsData?.responseData.cards[indexPath.row].id else { return }
-            dataManager.requestDeleteCard(columnId: columnId, cardId: cardId)
+            let cardToDelete = self.dataManager.cardsData?.responseData.cards[indexPath.row]
+             guard let cardId = cardToDelete?.id else { return }
+            guard let columnId = self.dataManager.cardsData?.responseData.id else {return}
+             self.dataManager.cardsData?.responseData.cards.remove(at: indexPath.row)
+             tableView.deleteRows(at: [indexPath], with: .fade)
+             self.dataManager.requestDeleteCard(columnId: columnId, cardId: cardId)
         }
+    }
+    
+    // Drag & Drop
+    func moveItem(at sourceIndex: Int, to destinationIndex: Int) {
+        guard let card = self.dataManager.cardsData?.responseData.cards[sourceIndex] else { return }
+        self.dataManager.cardsData?.responseData.cards.remove(at: sourceIndex)
+        self.dataManager.cardsData?.responseData.cards.insert(card, at: destinationIndex)
+        sendDragAndDropNotification(card: card, cardIndex: sourceIndex)
+    }
+
+    func addItem(_ card: Card, at index: Int) {
+        self.dataManager.cardsData?.responseData.cards.insert(card, at: index)
+    }
+    
+    func canHandle(_ session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    // Using when Drag & Drop card
+    private func sendDragAndDropNotification(card: Card, cardIndex: Int) {
+        NotificationCenter.default.post(name: DataManager.AddCardCompletedNotification, object: nil, userInfo: [NotificationUserInfoKey.dragAndDropCard: card, NotificationUserInfoKey.dragedCardIndex: cardIndex])
     }
 }
 
