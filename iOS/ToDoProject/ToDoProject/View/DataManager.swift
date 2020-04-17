@@ -46,7 +46,7 @@ class DataManager {
         
         task.resume()
     }
-
+    
     // Add Card and Edit Card
     func requestUpdateCard(card: NewCardForm, requestMethod: String, column: String, cardId: Int?) {
         let columnId = switchColumnId(column: column)
@@ -92,25 +92,25 @@ class DataManager {
     func requestDeleteCard(columnId: Int,cardId: Int) {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .prettyPrinted]
-            let url = URL(string: "http://15.164.78.121:8080/api/columns/\(columnId)/cards/\(cardId)")
-            var request = URLRequest(url: url!)
-            request.httpMethod = RequestMethod.delete
-            request.addValue(self.headerUserId, forHTTPHeaderField: "Authorization")
+        let url = URL(string: "http://15.164.78.121:8080/api/columns/\(columnId)/cards/\(cardId)")
+        var request = URLRequest(url: url!)
+        request.httpMethod = RequestMethod.delete
+        request.addValue(self.headerUserId, forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-            let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
-                guard let data = data, error == nil else { print("error=\(error)")
-                    return }
-                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("response = \(response)")
-                } else {
-                    print("statusCode is 200, Success")
-                    self.sendNotification()
-                }
+        
+        let task = URLSession.shared.dataTask(with: request){ (data, response, error) in
+            guard let data = data, error == nil else { print("error=\(error)")
+                return }
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(response)")
+            } else {
+                print("statusCode is 200, Success")
+                self.sendNotification()
             }
-            task.resume()
         }
+        task.resume()
+    }
     
     
     func requestMoveCard(movingInfo: MoveCardForm, originalColumnId: Int, originalCardId: Int, originalCardRow: Int){
@@ -162,6 +162,16 @@ class DataManager {
         case Column.toDoColumn : return 1
         case Column.inProgressColumn : return 2
         case Column.doneColumn : return 3
+        default:
+            return 1
+        }
+    }
+    
+    func switchURLColumnId(column: String) -> Int {
+        switch column {
+        case ColumnURLName.toDo : return 1
+        case ColumnURLName.inProgress : return 2
+        case ColumnURLName.done : return 3
         default:
             return 1
         }
